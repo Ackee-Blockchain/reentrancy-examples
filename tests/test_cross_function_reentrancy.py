@@ -7,25 +7,28 @@ from pytypes.contracts.crossfunctionreentrancy.attacker import attack2_cross_fun
 
 
 
+
+
 def cross_function_reentrancy_attack():
     victim = default_chain.accounts[0]
     attacker = default_chain.accounts[1]
     
     sfContract = cross_function_reentrancy.deploy(from_=victim)
-    sfContract.deposit(from_=victim, value=10* 10**18)
+    sfContract.deposit(from_=victim, value="10 ether")
  
     
-    atContract = attack_cross_function_reentrancy.deploy(sfContract.address, from_=attacker)
+    atContract = attack_cross_function_reentrancy.deploy(sfContract.address, from_=attacker , value="1 ether")
     atContract2 = attack2_cross_function_reentrancy.deploy(sfContract.address, from_=attacker)
 
     atContract.setattacker2(atContract2.address, from_=attacker)
-    print("Vault balance: ", sfContract.balance)
+    print("Vault balance   : ", sfContract.balance)
+    print("Attacker balance: ", atContract.balance)
 
     print("----------Attack----------")
-    # attacker attack with 
-    atContract.attack(from_=attacker, value=1*10**18)
+    atContract.attack(from_=attacker)
 
-    print("Contract balance: ", sfContract.balance)
+
+    print("Vault balance   : ", sfContract.balance)
     print("Attacker balance: ", atContract.balance)
 
 @default_chain.connect()

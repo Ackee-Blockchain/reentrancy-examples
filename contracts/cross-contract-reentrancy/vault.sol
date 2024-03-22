@@ -145,7 +145,10 @@ contract cross_contract_reentrancy is ReentrancyGuard {
         ccrt.mint(msg.sender, msg.value); //eth to CCRT
     }
 
-
+    /**
+     * @notice Vulnerable function. similary cross function reentrancy but it harder to find.
+     * it uses other contract and it has different feature from just variables.
+     */
     function  withdraw() external nonReentrant {
         uint256 balance = ccrt.balanceOf(msg.sender);
         require(balance > 0, "Insufficient balance");
@@ -154,7 +157,7 @@ contract cross_contract_reentrancy is ReentrancyGuard {
         require(success, "Failed to send Ether"); 
 
         ccrt.burn(msg.sender, ccrt.balanceOf(msg.sender));
-        //remove_account(msg.sender); // generally it used function call then they use this value.
+        //remove_account(msg.sender); //  it it used function, it will hard to see vulnerability.
     }
 }
 

@@ -8,11 +8,16 @@ contract single_function_reentrancy {
     function deposit() external payable {
         balances[msg.sender] += msg.value;
     }
-
+    /**
+     * @notice vulnerable function, it can trigger to call msg.sender function.
+     * it can make valult to send amount value of ether repeatly. 
+     */
 	function withdraw() public {
         uint256 amount = balances[msg.sender];
         msg.sender.call{value: amount}("");
-        balances[msg.sender] = 0;
+        // also they did not minus from balance like
+        // balances[msg.sender] -= amount; so it can not revert.
+        balances[msg.sender] = 0 ;
 	}
 }
 
