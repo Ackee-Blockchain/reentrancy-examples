@@ -285,22 +285,22 @@ contract Revest is IRevest, RevestReentrancyGuard {
         // address fnftHandler = addressesProvider.getRevestFNFT();
         address fnftHandler = fnfthandler;
         // Check if this many FNFTs exist in the first place for the given ID
-        require(quantity <= IFNFTHandler(fnftHandler).getSupply(fnftId), "E022");
+        // require(quantity <= IFNFTHandler(fnftHandler).getSupply(fnftId), "E022");
         // Check if the user making this call has this many FNFTs to cash in
-        require(quantity <= IFNFTHandler(fnftHandler).getBalance(msg.sender, fnftId), "E006");
+        // require(quantity <= IFNFTHandler(fnftHandler).getBalance(msg.sender, fnftId), "E006");
         // Check if the user making this call has any FNFT's
-        require(IFNFTHandler(fnftHandler).getBalance(msg.sender, fnftId) > 0, "E032");
+        // require(IFNFTHandler(fnftHandler).getBalance(msg.sender, fnftId) > 0, "E032");
 
-        IRevest.LockType lockType = getLockManager().lockTypes(fnftId);
-        require(lockType != IRevest.LockType.DoesNotExist, "E007");
-        require(getLockManager().unlockFNFT(fnftId, msg.sender),
-            lockType == IRevest.LockType.TimeLock ? "E010" :
-            lockType == IRevest.LockType.ValueLock ? "E018" : "E019");
+        // IRevest.LockType lockType = getLockManager().lockTypes(fnftId);
+        // require(lockType != IRevest.LockType.DoesNotExist, "E007");
+        // require(getLockManager().unlockFNFT(fnftId, msg.sender),
+        //     lockType == IRevest.LockType.TimeLock ? "E010" :
+        //     lockType == IRevest.LockType.ValueLock ? "E018" : "E019");
         // Burn the FNFTs being exchanged
         burn(msg.sender, fnftId, quantity);
         getTokenVault().withdrawToken(fnftId, quantity, msg.sender);
 
-        emit FNFTWithdrawn(msg.sender, fnftId, quantity);
+        // emit FNFTWithdrawn(msg.sender, fnftId, quantity);
     }
 
 
@@ -384,18 +384,18 @@ contract Revest is IRevest, RevestReentrancyGuard {
         uint quantity 
     ) external override returns (uint) {
         IRevest.FNFTConfig memory fnft = getTokenVault().getFNFT(fnftId);
-        require(fnftId < getFNFTHandler().getNextId(), "E007");
-        require(fnft.isMulti, "E034");
-        require(fnft.depositStopTime < block.timestamp || fnft.depositStopTime == 0, "E035");
-        require(quantity > 0, "E070");
+        // require(fnftId < getFNFTHandler().getNextId(), "E007");
+        // require(fnft.isMulti, "E034");
+        // require(fnft.depositStopTime < block.timestamp || fnft.depositStopTime == 0, "E035");
+        // require(quantity > 0, "E070");
 
         // address vault = addressesProvider.getTokenVault();
         // address handler = addressesProvider.getRevestFNFT();
         // address lockHandler = addressesProvider.getLockManager();
 
-        address vault = getTokenVault();
-        address handler = getFNFTHandler();
-        address lockHandler = getLockManager();
+        // address vault = getTokenVault();
+        // address handler = getFNFTHandler();
+        // address lockHandler = getLockManager();
 
 
         bool createNewSeries = false;
@@ -425,7 +425,7 @@ contract Revest is IRevest, RevestReentrancyGuard {
         if(createNewSeries) {
             // Split into a new series
             newFNFTId = IFNFTHandler(handler).getNextId();
-            ILockManager(lockHandler).pointFNFTToLock(newFNFTId, lockId);
+            // ILockManager(lockHandler).pointFNFTToLock(newFNFTId, lockId);
             burn(msg.sender, fnftId, quantity);
             IFNFTHandler(handler).mint(msg.sender, newFNFTId, quantity, "");
         } else {
