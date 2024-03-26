@@ -18,6 +18,8 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
  * @title Hashmasks contract
  * @dev Extends ERC721 Non-Fungible Token Standard basic implementation
  */
+// below is original inheritance, the important thing is this is IERC721.
+//contract Masks is Context, Ownable, ERC165, IMasks, IERC721Metadata {
 contract Masks is Context {
     using Address for address;
     using EnumerableSet for EnumerableSet.UintSet;
