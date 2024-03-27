@@ -75,13 +75,19 @@ contract Vault is ERC1155 {
 
         _burn(msg.sender, id, nft_amount);
 
-        payable(msg.sender).call{value: nft_price[id] * nft_amount }("");
+        // payable(msg.sender).call{value: nft_price[id] * nft_amount }("");
+        payable(msg.sender).transfer(nft_price[id] * nft_amount);
     }
+
+    // in oiginal source code they have manager and token contract.
+    // so from this (manager) contract, it looks just calling original erc1155 token mint function.
+    // but in token contract, they have data modification.
+        
 
     function our_mint(address user, uint256 id, uint256 amount) internal {
 
         _mint(user, id, amount, "");
         fnftsCreated++;
-        
+     
     }
 }

