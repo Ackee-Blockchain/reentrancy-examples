@@ -1,11 +1,10 @@
 from wake.testing import *
 from typing import List
 
-from pytypes.contracts.erc777.vault import MyERC777Token, Exchange
+from pytypes.contracts.erc777.token import MyERC777Token
+from pytypes.contracts.erc777.vault import Exchange
 from pytypes.contracts.erc777.attacker import Attacker
 from pytypes.contracts.erc777.ERC1820Registry import ERC1820Registry
-
-# for running this, you need to copy paste from erc777modified.sol to erc777 path in the node_module
 
 @default_chain.connect()
 def test_default():
