@@ -10,7 +10,7 @@ import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/IERC777Sender.sol"
 import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/IERC777Recipient.sol";
 
 
-
+// https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit
 
 contract MyERC777Token is ERC777 {
     constructor(

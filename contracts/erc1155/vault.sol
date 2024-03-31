@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: None
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
@@ -82,7 +82,9 @@ contract Vault is ERC1155 {
     // in oiginal source code they have manager and token contract.
     // so from this (manager) contract, it looks just calling original erc1155 token mint function.
     // but in token contract, they have data modification.
-        
+    
+    // - Cross contract  (we removed this feature for the example)
+    // - Cross function  reentrancy
 
     function our_mint(address user, uint256 id, uint256 amount) internal {
 
