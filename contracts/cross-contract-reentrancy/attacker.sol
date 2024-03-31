@@ -3,19 +3,19 @@ pragma solidity ^0.8.0;
 import "./vault.sol";
 
 
-contract attack_cross_contract_reentrancy {
-    cross_contract_reentrancy victim;
-    ERC20 ccrt;
-    attack2_cross_contract_reentrancy attacker2;
+contract Attacker1 {
+    Vault victim;
+    CCRToken ccrt;
+    Attacker2 attacker2;
     uint256 amount = 1 ether;
 
     /**
      * @param _victim victim address
      * @param _ccrt  victim token ERC20 address
      */ 
-    constructor(cross_contract_reentrancy _victim, ERC20 _ccrt) payable {
-        victim = cross_contract_reentrancy(_victim);
-        ccrt = ERC20(_ccrt);  
+    constructor(address _victim, address _ccrt) payable {
+        victim = Vault(_victim);
+        ccrt = CCRToken(_ccrt);  
     }
 
 
@@ -24,7 +24,7 @@ contract attack_cross_contract_reentrancy {
      * @param _attacker2  attacker colleague address
      */
     function setattacker2(address _attacker2) public {
-        attacker2 = attack2_cross_contract_reentrancy(_attacker2);
+        attacker2 = Attacker2(_attacker2);
     }
 
     /**
@@ -50,14 +50,14 @@ contract attack_cross_contract_reentrancy {
 }
 
 
-contract attack2_cross_contract_reentrancy {
-    cross_contract_reentrancy victim;
-    ERC20 ccrt;
+contract Attacker2 {
+    Vault victim;
+    CCRToken ccrt;
     uint256 amount = 1 ether;
 
-    constructor(cross_contract_reentrancy _victim, ERC20 _ccrt) {
-        victim = cross_contract_reentrancy(_victim);
-        ccrt = ERC20(_ccrt);
+    constructor(address _victim, address _ccrt) {
+        victim = Vault(_victim);
+        ccrt = CCRToken(_ccrt);
     }
 
     /**
