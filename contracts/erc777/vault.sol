@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.0;
 
-import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/ERC777.sol";
+
+import "./token.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/IERC1820Registry.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/ERC1820Implementer.sol";
 
@@ -11,17 +12,6 @@ import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/IERC777Recipient.s
 
 
 // https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit
-
-contract MyERC777Token is ERC777 {
-    constructor(
-        uint256 initialSupply,
-        address[] memory defaultOperators,
-        address registry
-    ) ERC777("MyERC777Token", "MET", defaultOperators, registry){
-        _mint(msg.sender, initialSupply, "", "");
-    }
-}
-
 
 contract Exchange {
     MyERC777Token token;
@@ -46,7 +36,7 @@ contract Exchange {
         require(isTransferFromSuccess, "Token transfer failed.");
 
 
-        // !!!!!!!!!!!!!this two line are changed from original code but 
+        // !!!!!!!!!!!!! this two line are changed from original code but 
         // original vuln from tokenToTOkenInput is doing this thing inside of the function.
         (bool sent, ) = recipient.call{value: ethBought}("");
         require(sent, "Failed to send Ether");
@@ -75,12 +65,12 @@ contract Exchange {
         return numerator / denominator;
     }
 
-    function getOutputPrice(uint256 outputAmount, uint256 inputReserve, uint256 outputReserve) public pure returns (uint256) {
-        require(inputReserve > 0 && outputReserve > 0, "Invalid reserves");
-        uint256 numerator = inputReserve * outputAmount * 1000;
-        uint256 denominator = (outputReserve - outputAmount) * 997;
-        return numerator / denominator + 1;
-    }
+    // function getOutputPrice(uint256 outputAmount, uint256 inputReserve, uint256 outputReserve) public pure returns (uint256) {
+    //     require(inputReserve > 0 && outputReserve > 0, "Invalid reserves");
+    //     uint256 numerator = inputReserve * outputAmount * 1000;
+    //     uint256 denominator = (outputReserve - outputAmount) * 997;
+    //     return numerator / denominator + 1;
+    // }
 
     // function tokenToTokenInput(uint256 tokensSold, uint256 minTokensBought, uint256 minEthBought, uint256 deadline, address buyer, address recipient, address exchangeAddr) public returns (uint256) {
     //     require(deadline >= block.timestamp && tokensSold > 0, "Invalid deadline or tokensSold");
