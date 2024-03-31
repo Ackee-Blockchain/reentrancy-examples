@@ -14,11 +14,12 @@ def test_default():
 
     hashmask = Masks.deploy()
 
-    attackerContract = Attacker.deploy(hashmask, value="20 ether")
+    attackerContract = Attacker.deploy(hashmask, value="100 ether")
 
     print("this vault should be able to mint up to 20 NFT at once.")
 
     print("---------------------attack---------------------")
+
     attackerContract.attack()
     
     print("Attacker mint NFT :", attackerContract.nftCount())
