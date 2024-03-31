@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 // https://etherscan.io/address/0xc2c747e0f7004f9e8817db2ca4997657a7746928#code
-// Modified this source
+// Modified source
 
 
 import "@openzeppelin/contracts/utils/Address.sol";
@@ -19,13 +19,14 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
  * @dev Extends ERC721 Non-Fungible Token Standard basic implementation
  */
 // below is original inheritance, the important thing is this is IERC721.
+
 //contract Masks is Context, Ownable, ERC165, IMasks, IERC721Metadata {
 contract Masks is Context {
     using Address for address;
     using EnumerableSet for EnumerableSet.UintSet;
     using EnumerableMap for EnumerableMap.UintToAddressMap;
 
-    uint256 public constant MAX_NFT_SUPPLY = 16384;
+    uint256 public constant MAX_NFT_SUPPLY = 20;
 
 
         // Equals to `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`

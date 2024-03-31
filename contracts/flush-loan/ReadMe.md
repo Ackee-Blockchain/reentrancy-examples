@@ -7,7 +7,11 @@ In this case Vault Manage TKToken
 
 ## Expected Usage
 
-User call `flushLoan(uint256 amount)`, then vault transfer TKToken to the user and it calls `onFlushLoan()` at user contract. it use those flush loan and after this function, Vault check vault balance for check user complete return TKToken.
+- User can `deposit()` to deposit TKToken to the vault.
+
+- User can `withdraw()` to withdraw TKToken which depositted previsously.
+
+- User call `flushLoan(uint256 amount)`, then vault transfer TKToken to the user and it calls `onFlushLoan()` at user contract. it use those flush loan and after this function, Vault check vault balance for check user complete return TKToken.
 If user did not returned revert `flushLoan()`.
 
 
@@ -20,10 +24,10 @@ If user did not returned revert `flushLoan()`.
 ### Cause of Attack
 
 It can Cross function reentrancy.
+
 We can call funcitons in vault in `onFlushLoan()` function.
 
 After `onFlushLoan()` vault just check `token.balanceOf(address(this)) == balanceBefore` which is balance of Vault in TKToken. including all user's deposited tokens.
-
 
 ### Reentrant Target
 
