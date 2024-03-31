@@ -1,5 +1,6 @@
 # Reentrancy in ERC721 
 
+https://samczsun.com/the-dangers-of-surprising-code/
 ## Description
 
 User can mint at most 20 NFT at a time. and The Masks contract manage the information of NFT.
@@ -44,7 +45,3 @@ So we could mintNFT more than 20 in one transaction. also we could Exceed limit 
 - Should use one vairable for totalSupply.
 - Use Reentrancy Guard.
 
-
-
-## principle of least astonishment
-https://samczsun.com/the-dangers-of-surprising-code/
