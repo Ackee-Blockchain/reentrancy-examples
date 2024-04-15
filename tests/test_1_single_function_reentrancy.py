@@ -9,16 +9,16 @@ def test_default():
     victim = default_chain.accounts[0]
     attacker = default_chain.accounts[1]
     
-    vault_contract = Vault.deploy(from_=victim)
+    vault = Vault.deploy(from_=victim)
 
-    vault_contract.deposit(from_=victim, value="10 ether")
-    attacker_contract = Attacker.deploy(vault_contract.address, from_=attacker, value="1 ether")
+    vault.deposit(from_=victim, value="10 ether")
+    attacker_contract = Attacker.deploy(vault.address, from_=attacker, value="1 ether")
 
-    print("Vault balance   : ", vault_contract.balance)
+    print("Vault balance   : ", vault.balance)
     print("Attacker balance: ", attacker_contract.balance)
 
     print("----------Attack----------")
     attacker_contract.attack(from_=attacker)
 
-    print("Vault balance   : ", vault_contract.balance)
+    print("Vault balance   : ", vault.balance)
     print("Attacker balance: ", attacker_contract.balance)

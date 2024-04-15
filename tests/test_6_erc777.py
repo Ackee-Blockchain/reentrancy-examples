@@ -19,16 +19,16 @@ def test_default():
 
     erc777.transfer(exchange, 1000*(10**18), from_=victim)
     
-    atContract = Attacker.deploy(regs.address, erc777.address, exchange.address, value="100 ether", from_=attacker)
+    attacker_contract = Attacker.deploy(regs.address, erc777.address, exchange.address, value="100 ether", from_=attacker)
     print("Vault token  : ", erc777.balanceOf(exchange))
     print("Vault eth    : ", exchange.balance)
-    print("Attacker token: ", erc777.balanceOf(atContract))
-    print("Attacker eth  : ", atContract.balance)
+    print("Attacker token: ", erc777.balanceOf(attacker_contract))
+    print("Attacker eth  : ", attacker_contract.balance)
 
     print("---------------------attack---------------------")
 
-    atContract.attack(from_=attacker)
+    attacker_contract.attack(from_=attacker)
     print("Vault token  : ", erc777.balanceOf(exchange))
     print("Vault eth    : ", exchange.balance)
-    print("Attacker token: ", erc777.balanceOf(atContract))
-    print("Attacker eth  : ", atContract.balance)
+    print("Attacker token: ", erc777.balanceOf(attacker_contract))
+    print("Attacker eth  : ", attacker_contract.balance)

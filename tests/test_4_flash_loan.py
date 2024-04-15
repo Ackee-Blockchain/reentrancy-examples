@@ -13,16 +13,16 @@ def test_default():
 
     token = Token.deploy(11*10**18, from_=victim)
     vault= Vault.deploy(token, from_=victim)
-    attacker_ct = Attacker.deploy(vault, token, from_ =attacker)
+    attacker_contract = Attacker.deploy(vault, token, from_ =attacker)
     token.transfer(vault, 10*10**18, from_=victim)
 
     print("Vault token  : ", token.balanceOf(vault))
-    print("Attacker token: ", token.balanceOf(attacker_ct))
+    print("Attacker token: ", token.balanceOf(attacker_contract))
 
     print("---------------------attack---------------------")
-    attacker_ct.attack(from_=attacker)
+    attacker_contract.attack(from_=attacker)
     print("Vault token  : ", token.balanceOf(vault))
-    print("Attacker token: ", token.balanceOf(attacker_ct))
+    print("Attacker token: ", token.balanceOf(attacker_contract))
 
 #   0x0 October 2023
 #   Peapods Finance 13 December 2023

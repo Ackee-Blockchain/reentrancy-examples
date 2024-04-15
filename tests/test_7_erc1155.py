@@ -59,7 +59,6 @@ def test_default():
     vault2 = Vault.deploy(value="1000 ether")
     attacker_contract = Attacker.deploy(vault2, value="10 ether")
     print("attacker address: ", attacker_contract.address)
-
     print("Vault balance   : ", vault2.balance)
     print("Attacker balance: ", attacker_contract.balance)
 
