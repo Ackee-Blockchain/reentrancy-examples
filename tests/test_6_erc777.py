@@ -8,7 +8,7 @@ from pytypes.contracts.erc777.ERC1820Registry import ERC1820Registry
 
 @default_chain.connect()
 def test_default():
-    print("")
+    print("---------------------ERC777 Reentrancy---------------------")
     victim = default_chain.accounts[0]
     attacker = default_chain.accounts[1]
 
@@ -20,15 +20,15 @@ def test_default():
     erc777.transfer(exchange, 1000*(10**18), from_=victim)
     
     atContract = Attacker.deploy(regs.address, erc777.address, exchange.address, value="100 ether", from_=attacker)
-    print("valult token  : ", erc777.balanceOf(exchange))
-    print("valult eth    : ", exchange.balance)
-    print("attacker token: ", erc777.balanceOf(atContract))
-    print("attacker eth  : ", atContract.balance)
+    print("Vault token  : ", erc777.balanceOf(exchange))
+    print("Vault eth    : ", exchange.balance)
+    print("Attacker token: ", erc777.balanceOf(atContract))
+    print("Attacker eth  : ", atContract.balance)
 
     print("---------------------attack---------------------")
 
-    atContract.attack()
-    print("valult token  : ", erc777.balanceOf(exchange))
-    print("valult eth    : ", exchange.balance)
-    print("attacker token: ", erc777.balanceOf(atContract))
-    print("attacker eth  : ", atContract.balance)
+    atContract.attack(from_=attacker)
+    print("Vault token  : ", erc777.balanceOf(exchange))
+    print("Vault eth    : ", exchange.balance)
+    print("Attacker token: ", erc777.balanceOf(atContract))
+    print("Attacker eth  : ", atContract.balance)

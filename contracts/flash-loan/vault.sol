@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.20;
 
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -33,7 +33,7 @@ contract Vault {
     }
 
     // Execute a flash loan
-    function flushLoan(uint256 amount) public {
+    function flashLoan(uint256 amount) public {
         uint256 balanceBefore = token.balanceOf(address(this));
         require(balanceBefore >= amount, "Insufficient funds in contract");
 
@@ -41,7 +41,7 @@ contract Vault {
         require(token.transfer(msg.sender, amount), "Transfer failed");
 
         // Callback to the receiver to execute custom logic
-        Receiver(msg.sender).onFlushLoan(address(this), amount);
+        Receiver(msg.sender).onFlashLoan(address(this), amount);
 
         // Check balance after the callback to ensure tokens are returned
         require(token.balanceOf(address(this)) == balanceBefore, "Loan not paid back");
@@ -50,5 +50,5 @@ contract Vault {
 
 // A mock receiver contract interface to simulate the callback during the flash loan
 interface Receiver {
-    function onFlushLoan(address contractAddress, uint256 amount) external;
+    function onFlashLoan(address contractAddress, uint256 amount) external;
 }

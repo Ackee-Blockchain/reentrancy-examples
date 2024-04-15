@@ -4,11 +4,9 @@ from typing import List
 from pytypes.contracts.erc1155.vault import Vault
 from pytypes.contracts.erc1155.attacker import Attacker
 
-# for running this, you need to copy paste from erc777modified.sol to erc777 path in the node_module
-
 @default_chain.connect()
 def test_default():
-    print("")
+    print("---------------------ERC1155 Reentrancy---------------------")
     user1 = default_chain.accounts[0]
     user2 = default_chain.accounts[1]
     attacker = default_chain.accounts[1]
@@ -56,7 +54,7 @@ def test_default():
 
 
 
-    print("--------------------------Attack going to start--------------------------------------")
+    print("------------------Attack Preparation---------------------")
 
     vault2 = Vault.deploy(value="1000 ether")
     attacker_contract = Attacker.deploy(vault2, value="10 ether")
@@ -67,19 +65,8 @@ def test_default():
 
 
     print("---------------------attack---------------------")
-    ret = attacker_contract.attack()
+    ret = attacker_contract.attack(from_=attacker)
     print(ret.return_value)
 
     print("Vault balance   : ", vault2.balance)
     print("Attacker balance: ", attacker_contract.balance)
-
-
-
-
-    # attacker_contract = Attacker.deploy(vault)
-
-
-
-
-
-    

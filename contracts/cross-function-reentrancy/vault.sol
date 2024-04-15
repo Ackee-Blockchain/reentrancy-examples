@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract cross_function_reentrancy is ReentrancyGuard {
+contract Vault is ReentrancyGuard {
     mapping (address => uint) private balances;
 
     function deposit() external payable nonReentrant {

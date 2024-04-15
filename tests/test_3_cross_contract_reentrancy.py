@@ -6,8 +6,9 @@ from pytypes.contracts.crosscontractreentrancy.vault import Vault
 from pytypes.contracts.crosscontractreentrancy.attacker import Attacker1
 from pytypes.contracts.crosscontractreentrancy.attacker import Attacker2
 
-
-def cross_contract_reentrancy_attack():
+@default_chain.connect()
+def test_default():
+    print("---------------------Cross Contract Reentrancy---------------------")
     victim = default_chain.accounts[0]
     attacker = default_chain.accounts[1]
     
@@ -33,16 +34,3 @@ def cross_contract_reentrancy_attack():
 
     print("Vault balance   : ", sfContract.balance)
     print("Attacker balance: ", atContract.balance)
-
-
-@default_chain.connect()
-def test_default():
-    print("")
-    cross_contract_reentrancy_attack()
-
-
-
-
-
-
-

