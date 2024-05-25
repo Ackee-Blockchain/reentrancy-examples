@@ -9,20 +9,20 @@ import "./token.sol";
 
 
 contract Vault is ReentrancyGuard, Ownable {
-    CCRToken public ccrt;
+    CCRToken public customToken;
 
     constructor() Ownable(msg.sender) {}
 
-    function setToken(address _ccrt) external onlyOwner {
-        ccrt = CCRToken(_ccrt);
+    function setToken(address _customToken) external onlyOwner {
+        customToken = CCRToken(_customToken);
     }   
 
     function deposit() external payable nonReentrant {
-        ccrt.mint(msg.sender, msg.value); //eth to CCRT
+        customToken.mint(msg.sender, msg.value); //eth to CCRT
     }
 
     function burnUser() internal {
-        ccrt.burn(msg.sender, ccrt.balanceOf(msg.sender));
+        customToken.burn(msg.sender, customToken.balanceOf(msg.sender));
     }
 
     /**
@@ -30,7 +30,7 @@ contract Vault is ReentrancyGuard, Ownable {
      * it uses other contract and it has different feature from just variables.
      */
     function  withdraw() external nonReentrant {
-        uint256 balance = ccrt.balanceOf(msg.sender);
+        uint256 balance = customToken.balanceOf(msg.sender);
         require(balance > 0, "Insufficient balance");
         (bool success, ) = msg.sender.call{value: balance}(""); 
         // attacker call transfer ccrt balance to another account in the callback function.

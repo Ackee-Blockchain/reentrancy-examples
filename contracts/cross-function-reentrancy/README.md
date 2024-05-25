@@ -10,13 +10,13 @@ Vault accept user ETH and user can withdraw previously deposited ETH.
 
 ## Attack
 
-### External Call 
+### External Call
 
 In the Vault, in the `withdraw()` function. 
 They do `msg.sender.call{value: amount}("");` which trigger user's `receive` function.
 
 ### Cause of Attack
-It update balance after the external call. 
+It update balance after the external call.
 So when the user function is called, balance is unexpected state.
 
 Attacher already receive ETH but balance did not changed same as before called `withdraw()`.

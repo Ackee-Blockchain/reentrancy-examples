@@ -6,5 +6,6 @@ __pycache__/
 *.py[cod]
 .hypothesis/
 wake-coverage.cov
+.vscode/
 
 node_modules
