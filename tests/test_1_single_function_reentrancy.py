@@ -18,7 +18,8 @@ def test_default():
     print("Attacker balance: ", attacker_contract.balance)
 
     print("----------Attack----------")
-    attacker_contract.attack(from_=attacker)
+    tx = attacker_contract.attack(from_=attacker)
+    print(tx.call_trace)
 
     print("Vault balance   : ", vault.balance)
     print("Attacker balance: ", attacker_contract.balance)
