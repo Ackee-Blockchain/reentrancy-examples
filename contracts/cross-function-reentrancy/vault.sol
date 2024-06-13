@@ -23,4 +23,3 @@ contract Vault is ReentrancyGuard {
         balances[msg.sender] = 0; // did not checked balance. just overwrite to 0.
     }
 }
-

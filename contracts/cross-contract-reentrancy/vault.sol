@@ -26,14 +26,14 @@ contract Vault is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @notice Vulnerable function. similary cross function reentrancy but it harder to find.
-     * it uses other contract and it has different feature from just variables.
-     */
+    * @notice Vulnerable function. similary cross function reentrancy but it is harder to find.
+    * it uses other contracts and it has different features from just variables.
+    */
     function  withdraw() external nonReentrant {
         uint256 balance = customToken.balanceOf(msg.sender);
         require(balance > 0, "Insufficient balance");
         (bool success, ) = msg.sender.call{value: balance}(""); 
-        // attacker call transfer ccrt balance to another account in the callback function.
+        // attacker calls transfer CCRT balance to another account in the callback function.
         require(success, "Failed to send Ether"); 
 
         burnUser();
