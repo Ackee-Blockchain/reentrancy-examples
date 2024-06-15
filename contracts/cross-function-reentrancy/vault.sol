@@ -19,7 +19,8 @@ contract Vault is ReentrancyGuard {
 
     function withdraw() public nonReentrant { // we can use noReentrant here.
         uint amount = balances[msg.sender];
-        msg.sender.call{value: amount}("");
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Failed to send Ether"); 
         balances[msg.sender] = 0; // did not checked balance. just overwrite to 0.
     }
 }

@@ -13,7 +13,8 @@ contract Vault {
      */
 	function withdraw() public {
         uint256 amount = balances[msg.sender];
-        msg.sender.call{value: amount}("");
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Failed to send Ether"); 
         // also they did not minus from balance like
         // balances[msg.sender] -= amount; so it can not revert.
         balances[msg.sender] = 0 ;

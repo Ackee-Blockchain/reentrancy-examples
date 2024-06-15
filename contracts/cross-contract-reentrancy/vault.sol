@@ -35,7 +35,6 @@ contract Vault is ReentrancyGuard, Ownable {
         (bool success, ) = msg.sender.call{value: balance}(""); 
         // attacker calls transfer CCRT balance to another account in the callback function.
         require(success, "Failed to send Ether"); 
-
         burnUser();
     }
 }
