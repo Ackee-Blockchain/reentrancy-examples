@@ -1,5 +1,6 @@
 # Reentrancy in ERC777
- https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit
+
+https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit
 
 ## Description
 
@@ -9,7 +10,7 @@ Exchange contract exchange allow user to exchange ETH to SSSToken with calculate
 
 Calculation uses total amount of SSSToken in Exchange contract, total amount of ETH in Exchange contract with corresponding token amount user want to exchange.
 
-## Expected Usage 
+## Expected Usage
 
 ### Exchange contract
 
@@ -23,7 +24,7 @@ Calculation uses total amount of SSSToken in Exchange contract, total amount of 
 
 ## Attack
 
-### External Call 
+### External Call
 
 `IERC777Sender(implementer).tokensToSend(operator, from, to, amount, userData, operatorData);`  calls User function, in the `transfer()` function, also before change balances.
 
@@ -42,7 +43,6 @@ They calculate value from at beginnning of transaction state for multiple `excha
 ```
 
 ETHVALUT = SSSTOKENVALUE*997*ETH_BALANCE_IN_EXCHANGE / (SSSTOKEN_IN_EXCHANGE*1000 + SSSTOKENVALUE*997)
-
 
 it will second and third argument will be constant because we did not update state.
 so we can take it as 1 argument( SSSTOKENVALUE ) function. let calc(v)
@@ -76,4 +76,4 @@ Then returned sum would be exceed than initially we have.
 
 - Use ReentrancyGuard
 - Calculate right before sending
-
+// https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit

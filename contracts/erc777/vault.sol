@@ -1,17 +1,15 @@
-// SPDX-License-Identifier: MIT
+// @title Uniswap Exchange Interface V1
+// @notice Source code found at https://github.com/uniswap
+// https://github.com/Uniswap/v1-contracts/blob/c10c08d81d6114f694baa8bd32f555a40f6264da/contracts/uniswap_exchange.vy
+// rewrite this code for reentrancy example
 pragma solidity 0.7.0;
-
 
 import "./token.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/IERC1820Registry.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/ERC1820Implementer.sol";
-
 import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/IERC777Sender.sol";
-
 import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/IERC777Recipient.sol";
 
-
-// https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit
 
 contract Exchange {
     MyERC777Token token;
@@ -41,8 +39,6 @@ contract Exchange {
         (bool sent, ) = recipient.call{value: ethBought}("");
         require(sent, "Failed to send Ether");
 
-        // emit EthPurchase(buyer, tokensSold, ethBought);
-
         return ethBought;
     }
 
@@ -64,33 +60,6 @@ contract Exchange {
         uint256 denominator = (inputReserve * 1000) + inputAmountWithFee;
         return numerator / denominator;
     }
-
-    // function getOutputPrice(uint256 outputAmount, uint256 inputReserve, uint256 outputReserve) public pure returns (uint256) {
-    //     require(inputReserve > 0 && outputReserve > 0, "Invalid reserves");
-    //     uint256 numerator = inputReserve * outputAmount * 1000;
-    //     uint256 denominator = (outputReserve - outputAmount) * 997;
-    //     return numerator / denominator + 1;
-    // }
-
-    // function tokenToTokenInput(uint256 tokensSold, uint256 minTokensBought, uint256 minEthBought, uint256 deadline, address buyer, address recipient, address exchangeAddr) public returns (uint256) {
-    //     require(deadline >= block.timestamp && tokensSold > 0, "Invalid deadline or tokensSold");
-    //     require(minTokensBought > 0 && minEthBought > 0, "Invalid minTokensBought or minEthBought");
-    //     require(exchangeAddr != address(this) && exchangeAddr != address(0), "Invalid exchange address");
-
-
-
-    //     uint256 tokenReserve = token.balanceOf(address(this)); // this value still not updated
-    //     uint256 ethBought = getInputPrice(tokensSold, tokenReserve, address(this).balance);
-
-    //     require(ethBought >= minEthBought, "Insufficient ETH bought");
-
-    //     require(token.transferFrom(buyer, address(this), tokensSold), "Token transfer failed");
-
-    //     Call ethToTokenTransferInput on the specified exchange
-    //     uint256 tokensBought = Exchange(exchangeAddr).ethToTokenTransferInput{value: ethBought}(minTokensBought, deadline, recipient);
-
-    //     return tokensBought;
-    // }
 }
 
 

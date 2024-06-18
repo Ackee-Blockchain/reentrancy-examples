@@ -18,3 +18,7 @@ cmd_args = "-k istanbul -q"
 
 [testing.hardhat]
 cmd_args = ""
+
+[printer."lsp-public-functions"]
+pure = true
+view = true
