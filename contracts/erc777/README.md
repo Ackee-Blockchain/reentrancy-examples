@@ -1,10 +1,6 @@
 # Reentrancy in ERC777
 
-https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit
-
 ## Description
-
-### **erc777modified.sol are modified only erc1820 address. so not related to reentrancy example**
 
 Exchange contract exchange allow user to exchange ETH to SSSToken with calculated rate.
 
@@ -72,8 +68,11 @@ in this case ETHVALUE2 will bigger since numerator does not change. but denomina
 
 Then returned sum would be exceed than initially we have.
 
-### Mitigation 
+### Mitigation
 
 - Use ReentrancyGuard
 - Calculate right before sending
-// https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit
+
+### Resource
+
+https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit
