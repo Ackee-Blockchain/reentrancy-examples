@@ -6,8 +6,6 @@ from pytypes.contracts.erc777.vault import Exchange
 from pytypes.contracts.erc777.attacker import Attacker
 from pytypes.contracts.erc777.ERC1820Registry import ERC1820Registry
 
-from pytypes.node_modules.openzeppelinsolidity340.token.ERC777 import ERC777
-
 REGISTORY = ERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24)
 
 @default_chain.connect()

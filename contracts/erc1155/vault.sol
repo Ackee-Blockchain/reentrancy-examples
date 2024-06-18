@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: None
+// SPDX-License-Identifier: GNU-GPL v3.0 or later
 pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
@@ -23,9 +23,7 @@ contract Vault is ERC1155 {
         return fnftsCreated;
     }
 
-    constructor() ERC1155("") payable {
-  
-    }
+    constructor() ERC1155("") payable {}
     
 
     function create(uint256 nftAmount, uint256 value) public returns (uint256){

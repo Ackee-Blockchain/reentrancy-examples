@@ -1,5 +1,4 @@
 from wake.testing import *
-from typing import List
 
 from pytypes.contracts.erc1155.vault import Vault
 from pytypes.contracts.erc1155.attacker import Attacker
@@ -51,21 +50,22 @@ def test_default():
     ret = vault.withdraw(next_token_id, from_=user1)
     print(ret.call_trace)
 
-
-
-
-    print("------------------Attack Preparation---------------------")
+@default_chain.connect()
+def test_attack():
+    # print("---------------------ERC1155 Reentrancy---------------------")
+    attacker = default_chain.accounts[1]
 
     vault2 = Vault.deploy(value="1000 ether")
     attacker_contract = Attacker.deploy(vault2, value="10 ether")
+  
     print("attacker address: ", attacker_contract.address)
     print("Vault balance   : ", vault2.balance)
     print("Attacker balance: ", attacker_contract.balance)
 
-
     print("---------------------attack---------------------")
-    ret = attacker_contract.attack(from_=attacker)
-    print(ret.return_value)
+    tx = attacker_contract.attack(from_=attacker)
+    print(tx.call_trace)
+    print(tx.return_value)
 
     print("Vault balance   : ", vault2.balance)
     print("Attacker balance: ", attacker_contract.balance)

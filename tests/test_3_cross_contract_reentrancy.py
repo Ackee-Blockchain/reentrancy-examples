@@ -2,7 +2,6 @@ from wake.testing import *
 
 from pytypes.contracts.crosscontractreentrancy.token import  CCRToken
 from pytypes.contracts.crosscontractreentrancy.vault import Vault
-
 from pytypes.contracts.crosscontractreentrancy.attacker import Attacker1
 from pytypes.contracts.crosscontractreentrancy.attacker import Attacker2
 

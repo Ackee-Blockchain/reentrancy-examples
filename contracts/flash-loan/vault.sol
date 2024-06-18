@@ -27,28 +27,23 @@ contract Vault {
     }
 
     function withdraw(uint256 amount) public {
-        require(balances[msg.sender] >= amount, "Insufficient balance"); // Checks
-        balances[msg.sender] -= amount; // Effects
-        require(token.transfer(msg.sender, amount), "Transfer failed"); // Interactions
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;
+        require(token.transfer(msg.sender, amount), "Transfer failed");
     }
 
-    // Execute a flash loan
     function flashLoan(uint256 amount) public {
         uint256 balanceBefore = token.balanceOf(address(this));
         require(balanceBefore >= amount, "Insufficient funds in contract");
 
-        // Transfer tokens to the receiver (caller)
         require(token.transfer(msg.sender, amount), "Transfer failed");
 
-        // Callback to the receiver to execute custom logic
         Receiver(msg.sender).onFlashLoan(address(this), amount);
 
-        // Check balance after the callback to ensure tokens are returned
         require(token.balanceOf(address(this)) == balanceBefore, "Loan not paid back");
     }
 }
 
-// A mock receiver contract interface to simulate the callback during the flash loan
 interface Receiver {
     function onFlashLoan(address contractAddress, uint256 amount) external;
 }

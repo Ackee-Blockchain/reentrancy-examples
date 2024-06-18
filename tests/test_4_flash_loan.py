@@ -20,9 +20,9 @@ def test_default():
     print("Attacker token: ", token.balanceOf(attacker_contract))
 
     print("---------------------attack---------------------")
-    attacker_contract.attack(from_=attacker)
+    tx = attacker_contract.attack(from_=attacker)
+    print(tx.call_trace)
+    
     print("Vault token  : ", token.balanceOf(vault))
     print("Attacker token: ", token.balanceOf(attacker_contract))
 
-#   0x0 October 2023
-#   Peapods Finance 13 December 2023
