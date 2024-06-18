@@ -1,7 +1,7 @@
 // @title Uniswap Exchange Interface V1
 // @notice Source code found at https://github.com/uniswap
 // https://github.com/Uniswap/v1-contracts/blob/c10c08d81d6114f694baa8bd32f555a40f6264da/contracts/uniswap_exchange.vy
-// rewrite this code for reentrancy example
+// modified source code for reentrancy example
 pragma solidity 0.7.0;
 
 import "./token.sol";

@@ -1,6 +1,5 @@
-# Reentrancy in ERC721 
+# Reentrancy in ERC721
 
-https://samczsun.com/the-dangers-of-surprising-code/
 ## Description
 
 User can mint at most 20 NFT at a time. and The Masks contract manage the information of NFT.
@@ -12,7 +11,7 @@ In this contract, the number of all NFT that can generate is 20 by `MAX_NFT_SUPP
 
 ## Attack
 
-### External Call 
+### External Call
 
 `IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, data)`  calls User function, in the `_safeMint()` function, in the Masks contract.
 
@@ -20,12 +19,10 @@ In this contract, the number of all NFT that can generate is 20 by `MAX_NFT_SUPP
 
 The Masks contract checks the number of minting NFT at beginning of the function.
 `totalSupply()` is used `_tokenOwners.length()` and it managed by `EnumerableMap.UintToAddressMap`.
-`_tokenOwners.length()` is updated when `  _tokenOwners.set(tokenId, to);` at `_mint()`
-So `totalSupply()` is updated for each NFT exact before sending. 
+`_tokenOwners.length()` is updated when `tokenOwners.set(tokenId, to);` at `_mint()`
+So `totalSupply()` is updated for each NFT exact before sending.
 
 ### Reentrant Target
-
-
 
 - Attacker call `mintNFT(20)`
 - let's say the value of `totalSupply()` is `N`.
@@ -39,9 +36,11 @@ So `totalSupply()` is updated for each NFT exact before sending.
 
 So we could mintNFT more than 20 in one transaction. also we could Exceed limit of minting in Contract.
 
-
-### Mitigation 
+### Mitigation
 
 - Should use one vairable for totalSupply.
 - Use Reentrancy Guard.
 
+### Resource
+
+https://samczsun.com/the-dangers-of-surprising-code/

@@ -1,17 +1,14 @@
-// SPDX-License-Identifier: private
 pragma solidity ^0.8.0;
 
+// https://samczsun.com/the-dangers-of-surprising-code/
 // https://etherscan.io/address/0xc2c747e0f7004f9e8817db2ca4997657a7746928#code
-// Modified source
-
+// Modified source for reentrancy example
 
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableMap.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
-
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
-
 
 
 /**
@@ -20,17 +17,15 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
  */
 // below is original inheritance, the important thing is this is IERC721.
 
-//contract Masks is Context, Ownable, ERC165, IMasks, IERC721Metadata {
 contract Masks is Context {
     using Address for address;
     using EnumerableSet for EnumerableSet.UintSet;
     using EnumerableMap for EnumerableMap.UintToAddressMap;
 
-    uint256 public constant MAX_NFT_SUPPLY = 20;
+    uint256 public constant MAX_NFT_SUPPLY = 40;
 
 
-        // Equals to `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`
-    // which can be also obtained as `IERC721Receiver(0).onERC721Received.selector`
+    // Equals to `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`
     bytes4 private constant _ERC721_RECEIVED = 0x150b7a02;
 
     // Mapping from holder address to their (enumerable) set of owned tokens
@@ -99,24 +94,7 @@ contract Masks is Context {
      */
     function getNFTPrice() public view returns (uint256) {
         require(totalSupply() < MAX_NFT_SUPPLY, "Sale has already ended");
-
-        uint currentSupply = totalSupply();
-
-        if (currentSupply >= 16381) {
-            return 100000000000000000000; // 16381 - 16383 100 ETH
-        } else if (currentSupply >= 16000) {
-            return 3000000000000000000; // 16000 - 16380 3.0 ETH
-        } else if (currentSupply >= 15000) {
-            return 1700000000000000000; // 15000  - 15999 1.7 ETH
-        } else if (currentSupply >= 11000) {
-            return 900000000000000000; // 11000 - 14999 0.9 ETH
-        } else if (currentSupply >= 7000) {
-            return 500000000000000000; // 7000 - 10999 0.5 ETH
-        } else if (currentSupply >= 3000) {
-            return 300000000000000000; // 3000 - 6999 0.3 ETH
-        } else {
-            return 100000000000000000; // 0 - 2999 0.1 ETH 
-        }
+        return 100000000000000000; // 0.1 ETH
     }
 
     /**
