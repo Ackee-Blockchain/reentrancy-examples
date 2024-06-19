@@ -25,4 +25,3 @@ def test_default():
     
     print("Vault token  : ", token.balanceOf(vault))
     print("Attacker token: ", token.balanceOf(attacker_contract))
-

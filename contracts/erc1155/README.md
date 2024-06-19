@@ -17,7 +17,7 @@ By using received nft, user can get corresponding amount of ETH.
 
 - Benefit of this system is NFT holder can withdraw ETH by this unlocked NFT.
 
-- User can call `update(uint256 id, uint256 nft_amount, uint256 value)` that this will burn nfts and create new nft same amount as burned.
+- User can call `create(uint256 nft_amount, uint256 value)` again.
 - this nft_amount is not necessary to same as created.
 And set new `value` that to be payed additinally.
     - ETH amount corresponding to One nft will (`value_when_crate()`/ `nft_amount_when_create()`) + (`value_when_upate()`/ `nft_amount_when_update()`)

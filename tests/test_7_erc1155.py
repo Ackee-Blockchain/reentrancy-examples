@@ -25,7 +25,7 @@ def test_default():
     print("user1 token amount:", vault.balanceOf(user1, token_id))
     print("user1 token amount:", vault.balanceOf(user2, token_id))
 
-    vault.pay_eth(token_id, from_=user1, value="100 ether")
+    vault.payEth(token_id, from_=user1, value="100 ether")
     print("we unlocked by paying")
 
     print("user1 going to withdraw")
@@ -34,20 +34,6 @@ def test_default():
 
     print("user2 going to withdraw")
     ret = vault.withdraw(token_id, from_ = user2)
-    print(ret.call_trace)
-
-    
-    ret = vault.create(2, 1*10**18, from_= user1)
-    token_id = ret.return_value
-    print("by updating, token (", token_id ,") will burned and create new token same amount but added value for unlock")
-    ret2 = vault.update(token_id, 2, 1*10**18, from_=user1)
-    next_token_id = ret2.return_value
-
-    print("token(", next_token_id, ") need to pay for unlock :", vault.getRquire(next_token_id))
-
-    vault.pay_eth(next_token_id, from_=user1, value="4 ether")
-    print("user1 going to withdraw")
-    ret = vault.withdraw(next_token_id, from_=user1)
     print(ret.call_trace)
 
 @default_chain.connect()
