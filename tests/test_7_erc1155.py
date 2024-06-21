@@ -10,7 +10,7 @@ def test_default():
     user2 = default_chain.accounts[1]
     attacker = default_chain.accounts[1]
 
-    print("------------------------Contract Usage--------------------------------------")
+    print("------------------------Expected Usage--------------------------------------")
     vault = Vault.deploy(value="1000 ether")
 
     ret = vault.create(100, 1*10**18, from_= user1)
@@ -38,7 +38,6 @@ def test_default():
 
 @default_chain.connect()
 def test_attack():
-    # print("---------------------ERC1155 Reentrancy---------------------")
     attacker = default_chain.accounts[1]
 
     vault2 = Vault.deploy(value="1000 ether")

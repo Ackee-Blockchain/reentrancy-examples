@@ -7,7 +7,7 @@ from pytypes.contracts.flashloan.attacker import Attacker
 
 @default_chain.connect()
 def test_default():
-    print("---------------------Flash Loan---------------------")
+    print("---------------------Reentrancy in Flash Loan---------------------")
     victim = default_chain.accounts[0]
     attacker = default_chain.accounts[1]
 
