@@ -62,4 +62,4 @@ contract Vault is ReentrancyGuard {
 }
 ```
 
-By implementing these mitigations, single-function reentrancy attacks can be prevented, ensuring the security of the Vault.
+By implementing them, single-function reentrancy attacks can be prevented, ensuring the security of the Vault.
