@@ -70,7 +70,7 @@ def test_attack():
     tx = attacker.attack()
     relay(chain2_warrior, validator_chain2, tx.events)
     token_id = tx.return_value
-    print(token_id)
+    print(tx.call_trace)
 
     print("Chain1: owner of tokenId = ", token_id, " is ", chain1_warrior.ownerOf(token_id))
     print("Chain2: owner of tokenId = ", token_id, " is ", chain2_warrior.ownerOf(token_id))

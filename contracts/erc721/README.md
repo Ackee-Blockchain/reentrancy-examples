@@ -2,45 +2,40 @@
 
 ## Description
 
-User can mint at most 20 NFT at a time. and The Masks contract manage the information of NFT.
-In this contract, the number of all NFT that can generate is 20 by `MAX_NFT_SUPPLY`.
+Users can mint up to 20 NFTs at a time. The Masks contract manages the information of these NFTs, with a total supply limit of 20 NFTs as defined by `MAX_NFT_SUPPLY`.
 
 ## Expected Usage
 
-- User can `mintNFT()` to mint NFT. User can generate at most 20 NFT per transaction.
+- Users can call `mintNFT()` to mint NFTs, with a maximum of 20 NFTs per transaction.
 
 ## Attack
 
 ### External Call
 
-`IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, data)`  calls User function, in the `_safeMint()` function, in the Masks contract.
+The call to `IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, data)` in the `_safeMint()` function triggers the user's function within the Masks contract.
 
 ### Cause of Attack
 
-The Masks contract checks the number of minting NFT at beginning of the function.
-`totalSupply()` is used `_tokenOwners.length()` and it managed by `EnumerableMap.UintToAddressMap`.
-`_tokenOwners.length()` is updated when `tokenOwners.set(tokenId, to);` at `_mint()`
-So `totalSupply()` is updated for each NFT exact before sending.
+The Masks contract checks the number of minting NFTs at the beginning of the function. The `totalSupply()` uses `_tokenOwners.length()` managed by `EnumerableMap.UintToAddressMap`. `_tokenOwners.length()` is updated when `tokenOwners.set(tokenId, to);` is called in `_mint()`. Thus, `totalSupply()` is updated for each NFT just before sending.
 
 ### Reentrant Target
 
-- Attacker call `mintNFT(20)`
-- let's say the value of `totalSupply()` is `N`.
-- The function `_mint()` update `_tokenOwners`. so now `totalSupply()` is `N+1`.
-- The function `_checkOnERC721Received` calls `onERC721Received()` in Attacker Contract.
-    - Attacker call `mintNFT(20)`
-    - at this moment `totalSupply()` is `N+1`.
-    - so we can generate 20 NFT as from totalSupply() is `N+1`.
-    - (it will check wether `N+1+20` is less than `MAX_NFT_SUPPLY` or not. but it should check with `N+20+20`).
-    - repeat similary above
-
-So we could mintNFT more than 20 in one transaction. also we could Exceed limit of minting in Contract.
+1. The attacker calls `mintNFT(20)`.
+2. Suppose `totalSupply()` is `N`.
+3. The `_mint()` function updates `_tokenOwners`, making `totalSupply()` `N+1`.
+4. The `_checkOnERC721Received` function calls `onERC721Received()` in the attacker contract.
+    - The attacker calls `mintNFT(20)` again.
+    - At this moment, `totalSupply()` is `N+1`.
+    - This allows minting 20 more NFTs since the check uses `N+1+20`, but it should check `N+20+20`.
+    - Repeat similarly to mint more than 20 NFTs in one transaction, exceeding the contract's minting limit.
 
 ### Mitigation
 
-- Should use one vairable for totalSupply.
-- Use Reentrancy Guard.
+- Use a single variable to track `totalSupply`.
+- Implement a Reentrancy Guard to prevent reentrant calls.
 
 ### Resource
 
-https://samczsun.com/the-dangers-of-surprising-code/
+- [The Dangers of Surprising Code](https://samczsun.com/the-dangers-of-surprising-code/)
+
+By adopting these mitigations, reentrancy attacks in ERC721 contracts can be prevented, ensuring the integrity of the minting process and adherence to supply limits.

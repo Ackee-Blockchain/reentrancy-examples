@@ -1,46 +1,41 @@
 # Cross Function Reentrancy
 
 ## Description
-Vault accept user ETH and user can withdraw previously deposited ETH.
+
+The Vault accepts ETH deposits from users and allows them to withdraw previously deposited ETH.
 
 ## Expected Usage
 
-- User send ETH to Vault with ` deposit()` function.
-- User can do `withdraw()` then get ETH from deposited Vault same amount as deposit.
+- Users send ETH to the Vault using the `deposit()` function.
+- Users can withdraw their deposited ETH using the `withdraw()` function.
 
 ## Attack
 
 ### External Call
 
-In the Vault, in the `withdraw()` function. 
-They do `msg.sender.call{value: amount}("");` which trigger user's `receive` function.
+In the Vault's `withdraw()` function, the call to `msg.sender.call{value: amount}("");` triggers the user's `receive` function.
 
 ### Cause of Attack
-It update balance after the external call.
-So when the user function is called, balance is unexpected state.
 
-Attacher already receive ETH but balance did not changed same as before called `withdraw()`.
-and after external call, just setting balalnce to 0.
-
-There is ReentrancyGuard on `withdraw()` but not `transfer()`.
-
+The Vault updates the user's balance after the external call. When the user's function is called, the balance is in an unexpected state. The attacker receives ETH, but the balance remains unchanged, and after the external call, the balance is set to 0.
 
 ### Reentrant Target
 
-We can call `withdraw()` again and again.
+The ReentrancyGuard is on `withdraw()` but not on `transfer()`, allowing repeated calls:
 
-- Attacker deposit 1 eth.
-- So Attacker have balance of 1 eth.
-- Attacker1 withdraw()
-    - Vault call receive() in Attacker1 at the same time Attacker1 receive 1 eth.
-    - Attacker1 can transfer() 1 eth of balance from Attacker1 to Attacker2 in vault.
-- Attacker2 transfer balance of 1 eth to Attacker1.
-- So Attacker have balance of 1 eth.
-- repeat above.
+1. Attacker deposits 1 ETH.
+2. Attacker has a balance of 1 ETH.
+3. Attacker calls `withdraw()`.
+    - The Vault triggers `receive()` in Attacker1, transferring 1 ETH.
+    - During the `receive()` call, Attacker1 transfers 1 ETH of balance to Attacker2 in the Vault.
+4. Attacker2 transfers the balance of 1 ETH back to Attacker1.
+5. Attacker has a balance of 1 ETH again.
+6. Repeat the above steps.
 
+### Mitigation
 
-### Mitigation 
+- Apply ReentrancyGuard to `transfer()` as well.
+- Deduct the balance by the same amount as the sent ETH before the external call.
+- Complete state changes before making external calls.
 
-- Set ReentrancyGuard also on `transfer()`.
-- Minus balance same amount as sent ETH by external call.
-- Complete changing state before external call.
+By implementing these mitigations, cross-function reentrancy attacks can be prevented, ensuring the integrity of the Vault system.

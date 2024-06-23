@@ -2,43 +2,38 @@
 
 ## Description
 
-There is ETH token and CCRToken. 
-Vault manage CCRToken. so vault is trusted from CCRToken so vault can mint and burn token.
+There is an ETH token and a CCRToken. The Vault manages CCRToken, allowing it to mint and burn tokens, making it a trusted entity for CCRToken.
 
 ## Expected Usage
 
-- User send ETH to Vault with ` deposit()` function. Vault run mint at CCRToken as msg.sender token.
-
-- User can do `withdraw()` then get ETH from deposited CCRToken.
+- Users send ETH to the Vault using the `deposit()` function, which mints CCRTokens equivalent to the deposited ETH for the user.
+- Users can call `withdraw()` to exchange their CCRTokens for ETH.
 
 ## Attack
 
-### External Call 
+### External Call
 
-In the Vault, in the `withdraw()` function. They do `msg.sender.call{value: balance}("");` which trigger user's `receive` function.
-
+In the Vault's `withdraw()` function, the call to `msg.sender.call{value: balance}("");` triggers the user's `receive` function.
 
 ### Cause of Attack
 
-It update CCRToken balance after the external call. 
-So when the user function is called, CCRToken is unexpected state.
-Attacker already receive ETH but CCRToken did not changed same as before called `withdraw()`.
-and `burnUser()` function burn CCRToken from currently msg.sender value.
+The Vault updates the CCRToken balance after the external call. When the user's function is called, the CCRToken is in an unexpected state. The attacker receives ETH, but the CCRToken balance remains unchanged. The `burnUser()` function then burns the CCRTokens from the current `msg.sender` value.
 
 ### Reentrant Target
 
-There is ReentrancyGuard in the vault. but we can call CCRToken function.
+Despite having a ReentrancyGuard in the Vault, the attacker can still call CCRToken functions:
 
-- Attacker1 deposit 1 eth.
-- So Attacker1 have CCRToken which equal value to 1 eth.
-- Attacker1 withdraw()
-    - Vault call receive() in Attacker1 at the same time Attacker receive 1 eth.
-    - Attacker1 call transfer() in CCRToken then transfer CCRToken to attacker2.
-- Attacker2 transfer() CCRToken to Attacker1.
-- So Attacker1 have CCRToken which equal value to 1 eth.
-- repeat above.
+1. Attacker1 deposits 1 ETH, receiving CCRTokens equivalent to 1 ETH.
+2. Attacker1 calls `withdraw()`.
+    - The Vault triggers `receive()` in Attacker1, transferring 1 ETH.
+    - Attacker1 calls `transfer()` in CCRToken, transferring CCRTokens to Attacker2.
+3. Attacker2 transfers CCRTokens back to Attacker1.
+4. Attacker1 again has CCRTokens equivalent to 1 ETH.
+5. Repeat the above steps.
 
-### Mitigation 
+### Mitigation
 
-- Burn same amount that sent ETH.
-- Complete changing state before external call.
+- Burn the same amount of CCRTokens as the sent ETH.
+- Complete state changes before making external calls.
+
+By implementing these mitigations, cross-contract reentrancy attacks can be prevented, ensuring the integrity of the Vault and CCRToken system.

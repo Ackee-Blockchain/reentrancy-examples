@@ -2,7 +2,7 @@
 pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
-import "./Vault.sol";
+import "./Vuln.sol";
 
 contract Attacker is IERC721Receiver {
     Masks victim;

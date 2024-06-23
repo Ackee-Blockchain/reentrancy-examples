@@ -2,49 +2,41 @@
 
 ## Description
 
-Vault enable user to flash loan of ERC20 token.
-In this case Vault Manage TKToken
+The Vault enables users to take flash loans of ERC20 tokens, specifically managing TKToken.
 
 ## Expected Usage
 
-- User can `deposit()` to deposit TKToken to the vault.
-
-- User can `withdraw()` to withdraw TKToken which depositted previsously.
-
-- User call `flashLoan(uint256 amount)`, then vault transfer TKToken to the user and it calls `onFlashLoan()` at user contract. it use those flash loan and after this function, Vault check vault balance for check user complete return TKToken.
-If user did not returned revert `flashLoan()`.
+- Users can `deposit()` to deposit TKToken into the vault.
+- Users can `withdraw()` to withdraw previously deposited TKToken.
+- Users can call `flashLoan(uint256 amount)`, which transfers TKToken to the user and calls `onFlashLoan()` in the user's contract. After this function, the Vault checks its balance to ensure the user has returned the TKToken. If the user has not returned the tokens, `flashLoan()` reverts.
 
 ## Attack
 
 ### External Call
 
-`Receiver(msg.sender).onFlashLoan(address(this), amount);`  calls User function, in the `flashLoan()` function, in the vault.
+The `Receiver(msg.sender).onFlashLoan(address(this), amount);` call in the `flashLoan()` function triggers the user's function.
 
 ### Cause of Attack
 
-It can Cross function reentrancy.
+The attack exploits cross-function reentrancy. During the `onFlashLoan()` function, the attacker can call other functions in the Vault.
 
-We can call funcitons in vault in `onFlashLoan()` function.
-
-After `onFlashLoan()` vault just check `token.balanceOf(address(this)) == balanceBefore` which is balance of Vault in TKToken. including all user's deposited tokens.
+After `onFlashLoan()`, the Vault only checks `token.balanceOf(address(this)) == balanceBefore`, which includes all users' deposited tokens.
 
 ### Reentrant Target
 
-Attacker can call `deposit()` at Vault and deposit All flashLoaned value.
-And it increase `balance` of user in the Vault.
-But from TKToken, it just increase vault balance because Attacker deposit to Vault
-So `token.balanceOf(address(this))` will restored the satisfy condition.
+The attacker can call `deposit()` in the Vault to deposit the flash loaned amount, increasing the user's balance in the Vault. However, from the TKToken perspective, it just increases the Vault's balance, restoring `token.balanceOf(address(this))` to satisfy the condition.
 
-- Attacker call `flashLoan()` some value from Vault.
-  - Vault send Attacker value on TKToken.
-  - token.balanceOf( Vault ) will decrease.
-  - Vault call attacker external function `onFlashLoan()`.
-    - attacker `deposit()` value at Vault.
-    - token.balanceOf( Vault ) will restored.
-
-- Attacker can call `withdraw()` that deposited when flashLoaned.
+1. Attacker calls `flashLoan()` to borrow some amount from the Vault.
+   - The Vault sends the flash loan amount in TKToken to the attacker.
+   - `token.balanceOf(Vault)` decreases.
+   - The Vault calls the attacker's external function `onFlashLoan()`.
+     - The attacker deposits the amount back into the Vault.
+     - `token.balanceOf(Vault)` is restored.
+2. The attacker can then call `withdraw()` to withdraw the deposited amount from the flash loan.
 
 ### Mitigation
 
-- Use ReentrancyGuard for Vault
-- Do not use token.balanceOf(Vault) but make user to use function for returning loan and track those value by variable.
+- Use ReentrancyGuard in the Vault.
+- Do not rely on `token.balanceOf(Vault)`. Instead, require users to use a specific function to return the loan and track the returned amount with a separate variable.
+
+By implementing these mitigations, flash loan reentrancy attacks can be prevented, ensuring the security of the Vault.
