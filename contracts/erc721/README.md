@@ -34,8 +34,8 @@ The Masks contract checks the number of minting NFTs at the beginning of the fun
 - **ReentrancyGuard**: Implement a ReentrancyGuard to prevent reentrant calls.
 - Use a single variable to track `totalSupply`.
 
+By adopting them, reentrancy attacks in ERC721 contracts can be prevented, ensuring the integrity of the minting process and adherence to supply limits.
+
 ### Resource
 
 - [The Dangers of Surprising Code](https://samczsun.com/the-dangers-of-surprising-code/)
-
-By adopting them, reentrancy attacks in ERC721 contracts can be prevented, ensuring the integrity of the minting process and adherence to supply limits.

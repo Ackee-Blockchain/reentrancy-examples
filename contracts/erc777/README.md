@@ -59,8 +59,8 @@ The total ETH returned exceeds the initial amount due to the repeated reentrant 
 - **ReentrancyGuard**: Use ReentrancyGuard to prevent reentrant calls.
 - Calculate the exchange rate and update the state right before sending the tokens or ETH.
 
+By implementing them, ERC777 reentrancy attacks can be prevented, ensuring secure and accurate token exchanges.
+
 ### Resource
 
 - [Exploiting Uniswap: From Reentrancy to Actual Profit](https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit)
-
-By implementing them, ERC777 reentrancy attacks can be prevented, ensuring secure and accurate token exchanges.
