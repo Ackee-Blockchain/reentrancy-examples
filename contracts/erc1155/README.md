@@ -34,8 +34,15 @@ The Vault updates `fnftsCreated` after the external call, allowing an attacker t
 
 ### Mitigation
 
-- Use ReentrancyGuard to prevent reentrant calls.
-- Apply the checks-effects-interactions pattern to ensure state changes before external calls.
+- **ReentrancyGuard**: Use ReentrancyGuard to prevent reentrant calls.
+- **Check-Effects-Interacts**: Apply the checks-effects-interactions pattern to ensure state changes before external calls.
+
+```solidity
+function mint(address user, uint256 id, uint256 amount) internal {
+    fnftsCreated++;
+    _mint(user, id, amount, "");   
+}
+```
 
 ### Resources
 

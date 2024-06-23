@@ -36,7 +36,10 @@ The attacker can call `deposit()` in the Vault to deposit the flash loaned amoun
 
 ### Mitigation
 
-- Use ReentrancyGuard in the Vault.
+- It is necessary to follow the specification of ERC-3156 and best practice.
+
 - Do not rely on `token.balanceOf(Vault)`. Instead, require users to use a specific function to return the loan and track the returned amount with a separate variable.
 
-By implementing these mitigations, flash loan reentrancy attacks can be prevented, ensuring the security of the Vault.
+- **ReentrancyGuard**: Use ReentrancyGuard in the Vault.
+
+By implementing these mitigations, this kind of flash loan reentrancy attack can be prevented, ensuring the security of the Vault.

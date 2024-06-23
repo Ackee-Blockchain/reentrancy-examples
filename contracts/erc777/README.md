@@ -56,7 +56,7 @@ The total ETH returned exceeds the initial amount due to the repeated reentrant 
 
 ### Mitigation
 
-- Use ReentrancyGuard to prevent reentrant calls.
+- **ReentrancyGuard**: Use ReentrancyGuard to prevent reentrant calls.
 - Calculate the exchange rate and update the state right before sending the tokens or ETH.
 
 ### Resource

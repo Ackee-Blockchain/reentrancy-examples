@@ -31,8 +31,8 @@ The Masks contract checks the number of minting NFTs at the beginning of the fun
 
 ### Mitigation
 
+- **ReentrancyGuard**: Implement a ReentrancyGuard to prevent reentrant calls.
 - Use a single variable to track `totalSupply`.
-- Implement a Reentrancy Guard to prevent reentrant calls.
 
 ### Resource
 

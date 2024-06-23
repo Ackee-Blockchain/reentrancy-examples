@@ -31,9 +31,44 @@ Despite having a ReentrancyGuard in the Vault, the attacker can still call CCRTo
 4. Attacker1 again has CCRTokens equivalent to 1 ETH.
 5. Repeat the above steps.
 
-### Mitigation
+### Prevention
 
-- Burn the same amount of CCRTokens as the sent ETH.
-- Complete state changes before making external calls.
+- **Checks-Effects-Interactions**: Complete state changes before making any external calls to prevent reentrancy attacks.
 
-By implementing these mitigations, cross-contract reentrancy attacks can be prevented, ensuring the integrity of the Vault and CCRToken system.
+```solidity
+CCRToken public customToken;
+
+function burnUser() internal {
+    customToken.burn(msg.sender, customToken.balanceOf(msg.sender));
+}
+
+function withdraw() external nonReentrant {
+    uint256 balance = customToken.balanceOf(msg.sender);
+    require(balance > 0, "Insufficient balance");
+    burnUser();
+    (bool success, ) = msg.sender.call{value: balance}(""); 
+    require(success, "Failed to send Ether"); 
+}
+```
+
+- **ReentrancyGuard**: A simple reentrancy guard alone cannot prevent this attack.
+
+- **Check the value before writing after the external call**: Ensure the state does not change unexpectedly due to an external call by using the previously stored balance value.
+
+```solidity
+CCRToken public customToken;
+
+function burnUser(uint256 balance) internal {
+    customToken.burn(msg.sender, balance);
+}
+
+function withdraw() external nonReentrant {
+    uint256 balance = customToken.balanceOf(msg.sender);
+    require(balance > 0, "Insufficient balance");
+    (bool success, ) = msg.sender.call{value: balance}(""); 
+    require(success, "Failed to send Ether"); 
+    burnUser(balance);
+}
+```
+
+By implementing these mitigations, cross-contract reentrancy attacks can be prevented, ensuring the integrity of the Vault system.

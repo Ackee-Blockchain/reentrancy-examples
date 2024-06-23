@@ -22,9 +22,9 @@ The attack arises because `getCurrentPrice` returns different values when called
 
 The `getCurrentPrice` function in `VulnVault` is exploited during the `withdraw` process, affecting the dependent `VictimVault` contract.
 
-### Mitigation
+### Prevention
 
-1. **ReentrancyGuard**: Implement a reentrancy guard within the `getCurrentPrice` function to prevent reentrant calls.
+- **ReentrancyGuard**: Implement a reentrancy guard within the `getCurrentPrice` function to prevent reentrant calls.
 
 ```solidity
 function getCurrentPrice() public view returns (uint256) {
@@ -36,7 +36,9 @@ function getCurrentPrice() public view returns (uint256) {
 }
 ```
 
-2. **Checks-Effects-Interactions Pattern**: Ensure all state changes occur before any external calls.
+- **Checks-Effects-Interactions Pattern**: Ensure all state changes occur before any external calls.
+
+This pattern ensures the `getCurrentPrice` function returns a trusted value, even if recursively called.
 
 ```solidity
 function withdraw(uint256 burnAmount) public nonReentrant { 
@@ -48,4 +50,4 @@ function withdraw(uint256 burnAmount) public nonReentrant {
 }
 ```
 
-This pattern ensures the `getCurrentPrice` function returns a trusted value, even if recursively called.
+

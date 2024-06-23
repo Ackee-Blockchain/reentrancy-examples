@@ -32,10 +32,28 @@ The ReentrancyGuard is on `withdraw()` but not on `transfer()`, allowing repeate
 5. Attacker has a balance of 1 ETH again.
 6. Repeat the above steps.
 
-### Mitigation
+### Prevention
 
-- Apply ReentrancyGuard to `transfer()` as well.
-- Deduct the balance by the same amount as the sent ETH before the external call.
-- Complete state changes before making external calls.
+- **ReentrancyGuard**: Apply `nonReentrant` to all functions that users can call to prevent state changes while another function's state change is ongoing.
+
+```solidity
+function withdraw() public nonReentrant {
+    uint amount = balances[msg.sender];
+    balances[msg.sender] = 0;
+    (bool success, ) = msg.sender.call{value: amount}("");
+    require(success, "Transfer failed");
+}
+```
+
+- **Checks-Effects-Interactions**: Complete all state changes before making any external calls.
+
+```solidity
+function withdraw() public nonReentrant {
+    uint amount = balances[msg.sender];
+    balances[msg.sender] = 0;
+    (bool success, ) = msg.sender.call{value: amount}("");
+    require(success, "Transfer failed");
+}
+```
 
 By implementing these mitigations, cross-function reentrancy attacks can be prevented, ensuring the integrity of the Vault system.

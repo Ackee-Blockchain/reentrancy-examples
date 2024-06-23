@@ -22,9 +22,9 @@ The root cause is the external call in `_safeMint` combined with incrementing `t
 
 The `mint` function in the `CrossChainWarriors` contract is targeted, leading to duplicate token IDs across chains.
 
-### Mitigation
+### Prevention
 
-1. **Checks-Effects-Interactions Pattern**: Ensure all state changes occur before any external calls.
+- **Checks-Effects-Interactions**: This method is the most straightforward and effective solution.
 
 ```solidity
 function mint(address to) public returns (uint256) {
@@ -36,9 +36,10 @@ function mint(address to) public returns (uint256) {
 }
 ```
 
-2. **Reentrancy Guard**: Use a reentrancy guard to prevent reentrant calls during the minting process.
+- **Reentrancy Guard**: Use a reentrancyGuard to prevent reentrant calls.
 
-By adopting these mitigations, developers can prevent cross-chain reentrancy attacks and ensure token integrity across multiple chains.
+By implementing these prevention, cross-chain reentrancy attacks can be prevented, ensuring the security of the Vault.
 
 ### Resources
+
 https://medium.com/@mateocesaroni_11308/cross-chain-re-entrancy-54ec2e924e9c
