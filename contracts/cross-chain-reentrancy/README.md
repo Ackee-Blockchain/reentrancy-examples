@@ -38,7 +38,7 @@ function mint(address to) public returns (uint256) {
 
 - **Reentrancy Guard**: Use a reentrancyGuard to prevent reentrant calls.
 
-By implementing these prevention, cross-chain reentrancy attacks can be prevented, ensuring the security of the Vault.
+By implementing them, cross-chain reentrancy attacks can be prevented, ensuring the security of the Vault.
 
 ### Resources
 

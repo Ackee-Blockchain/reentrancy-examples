@@ -56,4 +56,4 @@ function withdraw() public nonReentrant {
 }
 ```
 
-By implementing these mitigations, cross-function reentrancy attacks can be prevented, ensuring the integrity of the Vault system.
+By implementing them, cross-function reentrancy attacks can be prevented, ensuring the integrity of the Vault system.

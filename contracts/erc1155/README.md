@@ -32,9 +32,8 @@ The Vault updates `fnftsCreated` after the external call, allowing an attacker t
 3. Attacker unlocks by paying 1 ETH.
 4. Attacker withdraws 1001 NFTs with `nft_id = k` and receives 1001 ETH.
 
-### Mitigation
+### Prevention
 
-- **ReentrancyGuard**: Use ReentrancyGuard to prevent reentrant calls.
 - **Check-Effects-Interacts**: Apply the checks-effects-interactions pattern to ensure state changes before external calls.
 
 ```solidity
@@ -44,8 +43,10 @@ function mint(address user, uint256 id, uint256 amount) internal {
 }
 ```
 
+- **ReentrancyGuard**: Use ReentrancyGuard to prevent reentrant calls.
+
 ### Resources
 
 - [Revest Finance Vulnerabilities: More Than Re-Entrancy](https://blocksecteam.medium.com/revest-finance-vulnerabilities-more-than-re-entrancy-1609957b742f)
 
-By implementing these mitigations, reentrancy attacks in ERC1155 contracts can be prevented, ensuring secure NFT operations.
+By implementing them, reentrancy attacks in ERC1155 contracts can be prevented, ensuring secure NFT operations.

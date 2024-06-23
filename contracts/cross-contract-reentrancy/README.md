@@ -71,4 +71,4 @@ function withdraw() external nonReentrant {
 }
 ```
 
-By implementing these mitigations, cross-contract reentrancy attacks can be prevented, ensuring the integrity of the Vault system.
+By implementing them, cross-contract reentrancy attacks can be prevented, ensuring the integrity of the Vault system.

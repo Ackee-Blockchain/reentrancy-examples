@@ -34,7 +34,7 @@ The attacker can call `deposit()` in the Vault to deposit the flash loaned amoun
      - `token.balanceOf(Vault)` is restored.
 2. The attacker can then call `withdraw()` to withdraw the deposited amount from the flash loan.
 
-### Mitigation
+### Prevention
 
 - It is necessary to follow the specification of ERC-3156 and best practice.
 
@@ -42,4 +42,4 @@ The attacker can call `deposit()` in the Vault to deposit the flash loaned amoun
 
 - **ReentrancyGuard**: Use ReentrancyGuard in the Vault.
 
-By implementing these mitigations, this kind of flash loan reentrancy attack can be prevented, ensuring the security of the Vault.
+By implementing them, reentrancy attacks on the flash loan can be prevented, ensuring the security of the Vault.

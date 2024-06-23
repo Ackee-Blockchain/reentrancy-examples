@@ -54,7 +54,7 @@ The ETH value calculation remains constant for the same input because the state 
 
 The total ETH returned exceeds the initial amount due to the repeated reentrant calls.
 
-### Mitigation
+### Prevention
 
 - **ReentrancyGuard**: Use ReentrancyGuard to prevent reentrant calls.
 - Calculate the exchange rate and update the state right before sending the tokens or ETH.
@@ -63,4 +63,4 @@ The total ETH returned exceeds the initial amount due to the repeated reentrant 
 
 - [Exploiting Uniswap: From Reentrancy to Actual Profit](https://blog.openzeppelin.com/exploiting-uniswap-from-reentrancy-to-actual-profit)
 
-By implementing these mitigations, ERC777 reentrancy attacks can be prevented, ensuring secure and accurate token exchanges.
+By implementing them, ERC777 reentrancy attacks can be prevented, ensuring secure and accurate token exchanges.
