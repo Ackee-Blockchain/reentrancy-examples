@@ -1,8 +1,8 @@
 from wake.testing import *
 
-from pytypes.contracts.flashloan.token import Token
-from pytypes.contracts.flashloan.vault import Vault
-from pytypes.contracts.flashloan.attacker import Attacker
+from pytypes.contracts.flashloan.Token import Token
+from pytypes.contracts.flashloan.Vault import Vault
+from pytypes.contracts.flashloan.Attacker import Attacker
 
 
 @default_chain.connect()
@@ -22,6 +22,6 @@ def test_default():
     print("---------------------attack---------------------")
     tx = attacker_contract.attack(from_=attacker)
     print(tx.call_trace)
-    
+
     print("Vault token  : ", token.balanceOf(vault))
     print("Attacker token: ", token.balanceOf(attacker_contract))

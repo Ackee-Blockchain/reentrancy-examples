@@ -1,9 +1,9 @@
 from wake.testing import *
 from typing import List
 
-from pytypes.contracts.erc777.token import MyERC777Token
-from pytypes.contracts.erc777.vault import Exchange
-from pytypes.contracts.erc777.attacker import Attacker
+from pytypes.contracts.erc777.Token import MyERC777Token
+from pytypes.contracts.erc777.Vault import Exchange
+from pytypes.contracts.erc777.Attacker import Attacker
 from pytypes.contracts.erc777.ERC1820Registry import ERC1820Registry
 
 REGISTORY = ERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24)
@@ -22,7 +22,7 @@ def test_default():
     exchange = Exchange.deploy(erc777, value="1000 ether")
 
     erc777.transfer(exchange, 1000*(10**18), from_=victim)
-    
+
     attacker_contract = Attacker.deploy(erc777.address, exchange.address, value="100 ether", from_=attacker)
     print("Vault token   : ", erc777.balanceOf(exchange))
     print("Vault eth     : ", exchange.balance)

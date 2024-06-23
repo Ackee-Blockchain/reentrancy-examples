@@ -4,9 +4,7 @@ pragma solidity 0.8.20;
 import "./VictimVault.sol";
 import "./VulnVault.sol";
 
-
 contract Attacker {
-
     VulnVault public vulnVault;
 
     VictimVault public victimVault;
@@ -27,9 +25,9 @@ contract Attacker {
     }
 
     receive() external payable {
-        if(counter == 0){
+        if (counter == 0) {
             counter++;
-            victimVault.deposit{value: 1e18}(); 
+            victimVault.deposit{value: 1e18}();
         }
     }
 }

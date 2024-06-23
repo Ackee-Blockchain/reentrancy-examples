@@ -1,8 +1,18 @@
-# reentrancy-examples
+# Reentrancy examples
+A repository with examples of reentrancy vulnerabilities and their exploitations in Wake framework.
 
+The description for each reentrancy is in the corresponding directory.
+
+## Setup
 ```shell
 npm ci
+wake up
 ```
 
-Description for each reentrancy are at corresponding contracts directory.
+## Run tests
+```shell
+wake test tests/test_1_single_function_reentrancy.py
+```
+
+
 

@@ -6,36 +6,23 @@ import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-
-contract CrossChainWarriors is
-    ERC721("CrossChainWarriors", "CCWAR")
-{
-
+contract CrossChainWarriors is ERC721("CrossChainWarriors", "CCWAR") {
     uint256 public tokenIds;
 
     address public _validator;
 
     bool _mintable;
-    
+
     mapping(uint256 => address) addressByChainId;
 
-
-    modifier onlyValidator(){
-        require(_msgSender() == _validator,"Not a Validator");
+    modifier onlyValidator() {
+        require(_msgSender() == _validator, "Not a Validator");
         _;
     }
 
-    event CrossChainTransfer(
-        uint256 crossChainId,
-        address contractAddress,
-        bytes message
-    );
+    event CrossChainTransfer(uint256 crossChainId, address contractAddress, bytes message);
 
-    constructor(
-        address validator,
-        bool mintable
-    )  
-    {
+    constructor(address validator, bool mintable) {
         _validator = validator;
         tokenIds++;
         _mintable = mintable;
@@ -60,11 +47,7 @@ contract CrossChainWarriors is
     /**
      * @dev Cross-chain functions
      */
-    function crossChainTransfer(
-        uint256 crossChainId,
-        address to,
-        uint256 tokenId
-    ) external {
+    function crossChainTransfer(uint256 crossChainId, address to, uint256 tokenId) external {
         if (to == address(0)) {
             revert ERC721InvalidReceiver(address(0));
         }
@@ -73,29 +56,17 @@ contract CrossChainWarriors is
         if (previousOwner == address(0)) {
             revert ERC721InvalidSender(address(0));
         }
-        
-        emit CrossChainTransfer(
-            crossChainId,
-            addressByChainId[crossChainId],
-            abi.encode(tokenId, msg.sender, to)
-        );
+
+        emit CrossChainTransfer(crossChainId, addressByChainId[crossChainId], abi.encode(tokenId, msg.sender, to));
     }
 
-    function crossChainMessage(bytes calldata message)
-        external
-        onlyValidator
-    {
-        (
-            uint256 tokenId,
-            ,
-            address to
-        ) = abi.decode(message, (uint256, address, address));
+    function crossChainMessage(bytes calldata message) external onlyValidator {
+        (uint256 tokenId,, address to) = abi.decode(message, (uint256, address, address));
 
         _mintId(to, tokenId);
     }
 
-
-    function addChainAddress(uint chainId, address contractAddress) external onlyValidator{
+    function addChainAddress(uint256 chainId, address contractAddress) external onlyValidator {
         addressByChainId[chainId] = contractAddress;
     }
 }

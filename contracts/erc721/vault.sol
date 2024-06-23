@@ -10,7 +10,6 @@ import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
-
 /**
  * @title Hashmasks contract
  * @dev Extends ERC721 Non-Fungible Token Standard basic implementation
@@ -24,19 +23,17 @@ contract Masks is Context {
 
     uint256 public constant MAX_NFT_SUPPLY = 40;
 
-
     // Equals to `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`
     bytes4 private constant _ERC721_RECEIVED = 0x150b7a02;
 
     // Mapping from holder address to their (enumerable) set of owned tokens
-    mapping (address => EnumerableSet.UintSet) private _holderTokens;
+    mapping(address => EnumerableSet.UintSet) private _holderTokens;
 
     // Enumerable mapping from token ids to their owners
     EnumerableMap.UintToAddressMap private _tokenOwners;
 
-
     // Mapping from token ID to name
-    mapping (uint256 => string) private _tokenName;
+    mapping(uint256 => string) private _tokenName;
 
     // Token name
     string private _name;
@@ -44,7 +41,7 @@ contract Masks is Context {
     // Token symbol
     string private _symbol;
 
-     /**
+    /**
      * @dev Indicates a failure with the token `receiver`. Used in transfers.
      * @param receiver Address to which tokens are being transferred.
      */
@@ -53,7 +50,7 @@ contract Masks is Context {
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
-    constructor () {
+    constructor() {
         _name = "MyERC721Token";
         _symbol = "MET";
     }
@@ -88,7 +85,6 @@ contract Masks is Context {
         return _tokenOwners.length();
     }
 
-
     /**
      * @dev Gets current Hashmask Price
      */
@@ -98,8 +94,8 @@ contract Masks is Context {
     }
 
     /**
-    * @dev Mints Masks
-    */
+     * @dev Mints Masks
+     */
     function mintNFT(uint256 numberOfNfts) public payable {
         require(totalSupply() < MAX_NFT_SUPPLY, "Sale has already ended");
         require(numberOfNfts > 0, "numberOfNfts cannot be 0");
@@ -107,11 +103,10 @@ contract Masks is Context {
         require(totalSupply() + numberOfNfts <= MAX_NFT_SUPPLY, "Exceeds MAX_NFT_SUPPLY");
         require(getNFTPrice() * numberOfNfts == msg.value, "Ether value sent is not correct");
 
-        for (uint i = 0; i < numberOfNfts; i++) {
-            uint mintIndex = totalSupply();
+        for (uint256 i = 0; i < numberOfNfts; i++) {
+            uint256 mintIndex = totalSupply();
             _safeMint(msg.sender, mintIndex);
         }
-
     }
 
     /**
@@ -126,13 +121,11 @@ contract Masks is Context {
         return _tokenOwners.contains(tokenId);
     }
 
-  
-
     /**
      * @dev Safely mints `tokenId` and transfers it to `to`.
      *
      * Requirements:
-     d*
+     *  d*
      * - `tokenId` must not exist.
      * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
      *
@@ -186,7 +179,6 @@ contract Masks is Context {
         return size > 0;
     }
 
-
     /**
      * @dev Private function to invoke {IERC721Receiver-onERC721Received} on a target address. This will revert if the
      * recipient doesn't accept the token transfer. The call is not executed if the target address is not a contract.
@@ -215,7 +207,6 @@ contract Masks is Context {
         }
     }
 
-
     /**
      * @dev Hook that is called before any token transfer. This includes minting
      * and burning.
@@ -231,5 +222,5 @@ contract Masks is Context {
      *
      * To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks].
      */
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual { }
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual {}
 }

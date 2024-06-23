@@ -8,7 +8,7 @@ interface Vault {
 
 contract Attacker {
     Vault vault;
-    uint256 amount = 1 ether ;
+    uint256 amount = 1 ether;
 
     constructor(Vault _vault) payable {
         vault = Vault(_vault);

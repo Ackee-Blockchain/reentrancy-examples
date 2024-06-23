@@ -4,27 +4,27 @@
 // modified source code for reentrancy example
 pragma solidity 0.7.0;
 
-import "./token.sol";
+import "./Token.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/IERC1820Registry.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/introspection/ERC1820Implementer.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/IERC777Sender.sol";
 import "node_modules/openzeppelin-solidity-3.4.0/token/ERC777/IERC777Recipient.sol";
 
-
 contract Exchange {
     MyERC777Token token;
+
     constructor(address _token) payable {
         token = MyERC777Token(_token);
     }
-    
+
     function tokenToEthInput(uint256 tokensSold) public returns (uint256) {
         address buyer = msg.sender;
         address recipient = msg.sender;
-        uint256 tokenReserve = token.balanceOf(address(this)); // this value did not updated should be increased 
+        uint256 tokenReserve = token.balanceOf(address(this)); // this value did not updated should be increased
         uint256 ethBought = getInputPrice(tokensSold, tokenReserve, address(this).balance);
-        
+
         require(address(this).balance >= ethBought, "Insufficient contract balance.");
-        
+
         // Send ETH to the recipient
         // (bool sent, ) = recipient.call{value: ethBought}("");
         // require(sent, "Failed to send Ether");
@@ -33,10 +33,9 @@ contract Exchange {
         bool isTransferFromSuccess = token.transferFrom(buyer, address(this), tokensSold);
         require(isTransferFromSuccess, "Token transfer failed.");
 
-
-        // !!!!!!!!!!!!! this two line are changed from original code but 
+        // !!!!!!!!!!!!! this two line are changed from original code but
         // original vuln from tokenToTOkenInput is doing this thing inside of the function.
-        (bool sent, ) = recipient.call{value: ethBought}("");
+        (bool sent,) = recipient.call{value: ethBought}("");
         require(sent, "Failed to send Ether");
 
         return ethBought;
@@ -52,8 +51,12 @@ contract Exchange {
         return tokensBought;
     }
 
-      // Function to calculate input price, assuming it exists in this contract
-    function getInputPrice(uint256 inputAmount, uint256 inputReserve, uint256 outputReserve) public pure returns (uint256) {
+    // Function to calculate input price, assuming it exists in this contract
+    function getInputPrice(uint256 inputAmount, uint256 inputReserve, uint256 outputReserve)
+        public
+        pure
+        returns (uint256)
+    {
         require(inputReserve > 0 && outputReserve > 0, "Invalid reserves");
         uint256 inputAmountWithFee = inputAmount * 997;
         uint256 numerator = inputAmountWithFee * outputReserve;
@@ -61,5 +64,3 @@ contract Exchange {
         return numerator / denominator;
     }
 }
-
-

@@ -1,9 +1,9 @@
 from wake.testing import *
 
-from pytypes.contracts.crosscontractreentrancy.token import  CCRToken
-from pytypes.contracts.crosscontractreentrancy.vault import Vault
-from pytypes.contracts.crosscontractreentrancy.attacker import Attacker1
-from pytypes.contracts.crosscontractreentrancy.attacker import Attacker2
+from pytypes.contracts.crosscontractreentrancy.Token import  CCRToken
+from pytypes.contracts.crosscontractreentrancy.Vault import Vault
+from pytypes.contracts.crosscontractreentrancy.Attacker import Attacker1
+from pytypes.contracts.crosscontractreentrancy.Attacker import Attacker2
 
 @default_chain.connect()
 def test_default():
@@ -21,7 +21,7 @@ def test_default():
 
     print("Vault balance  : ", vault.balance)
     print("Attacker balace: ", attacker_contract.balance)
-    
+
     print("----------Attack----------")
     tx = attacker_contract.attack(from_=attacker)
     print(tx.call_trace)

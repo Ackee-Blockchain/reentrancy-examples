@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
 
 // A mock contract to demonstrate reentrancy
 contract Vault {
@@ -16,7 +14,7 @@ contract Vault {
         token = IERC20(_tokenAddress);
     }
 
-    function balanceOf(address account)public view returns(uint256){
+    function balanceOf(address account) public view returns (uint256) {
         return balances[account];
     }
 

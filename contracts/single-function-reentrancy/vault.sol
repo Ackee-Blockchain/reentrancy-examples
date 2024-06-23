@@ -9,14 +9,15 @@ contract Vault {
     }
     /**
      * @notice vulnerable function, it can trigger to call msg.sender function.
-     * it can make valult to send amount value of ether repeatly. 
+     * it can make valult to send amount value of ether repeatly.
      */
-	function withdraw() public {
+
+    function withdraw() public {
         uint256 amount = balances[msg.sender];
-        (bool success, ) = msg.sender.call{value: amount}("");
-        require(success, "Failed to send Ether"); 
+        (bool success,) = msg.sender.call{value: amount}("");
+        require(success, "Failed to send Ether");
         // also they did not minus from balance like
         // balances[msg.sender] -= amount; so it can not revert.
-        balances[msg.sender] = 0 ;
-	}
+        balances[msg.sender] = 0;
+    }
 }

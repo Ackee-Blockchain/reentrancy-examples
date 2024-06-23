@@ -1,7 +1,7 @@
 from wake.testing import *
 
-from pytypes.contracts.erc1155.vault import Vault
-from pytypes.contracts.erc1155.attacker import Attacker
+from pytypes.contracts.erc1155.Vault import Vault
+from pytypes.contracts.erc1155.Attacker import Attacker
 
 @default_chain.connect()
 def test_default():
@@ -16,7 +16,7 @@ def test_default():
     ret = vault.create(100, 1*10**18, from_= user1)
 
     token_id = ret.return_value
-    
+
     print("user1 holding token(", token_id, ") with amount: ", vault.balanceOf(user1, token_id))
     print("price of token(", token_id, ") is ", vault.getNftPrice(token_id))
 
@@ -42,7 +42,7 @@ def test_attack():
 
     vault2 = Vault.deploy(value="1000 ether")
     attacker_contract = Attacker.deploy(vault2, value="10 ether")
-  
+
     print("attacker address: ", attacker_contract.address)
     print("Vault balance   : ", vault2.balance)
     print("Attacker balance: ", attacker_contract.balance)

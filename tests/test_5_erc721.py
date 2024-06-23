@@ -1,7 +1,7 @@
 from wake.testing import *
 
-from pytypes.contracts.erc721.vault import Masks
-from pytypes.contracts.erc721.attacker import Attacker
+from pytypes.contracts.erc721.Vault import Masks
+from pytypes.contracts.erc721.Attacker import Attacker
 
 @default_chain.connect()
 def test_default():

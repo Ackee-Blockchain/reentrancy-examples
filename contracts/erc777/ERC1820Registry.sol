@@ -36,9 +36,8 @@ interface ERC1820ImplementerInterface {
     /// @param interfaceHash keccak256 hash of the name of the interface
     /// @param addr Address for which the contract will implement the interface
     /// @return ERC1820_ACCEPT_MAGIC only if the contract implements 'interfaceHash' for the address 'addr'.
-    function canImplementInterfaceForAddress(bytes32 interfaceHash, address addr) external view returns(bytes32);
+    function canImplementInterfaceForAddress(bytes32 interfaceHash, address addr) external view returns (bytes32);
 }
-
 
 /// @title ERC1820 Pseudo-introspection Registry Contract
 /// @author Jordi Baylina and Jacques Dafflon
@@ -46,11 +45,11 @@ interface ERC1820ImplementerInterface {
 /// @notice For more details, see https://eips.ethereum.org/EIPS/eip-1820
 contract ERC1820Registry {
     /// @notice ERC165 Invalid ID.
-    bytes4 constant internal INVALID_ID = 0xffffffff;
+    bytes4 internal constant INVALID_ID = 0xffffffff;
     /// @notice Method ID for the ERC165 supportsInterface method (= `bytes4(keccak256('supportsInterface(bytes4)'))`).
-    bytes4 constant internal ERC165ID = 0x01ffc9a7;
+    bytes4 internal constant ERC165ID = 0x01ffc9a7;
     /// @notice Magic value which is returned if a contract implements an interface on behalf of some other address.
-    bytes32 constant internal ERC1820_ACCEPT_MAGIC = keccak256(abi.encodePacked("ERC1820_ACCEPT_MAGIC"));
+    bytes32 internal constant ERC1820_ACCEPT_MAGIC = keccak256(abi.encodePacked("ERC1820_ACCEPT_MAGIC"));
 
     /// @notice mapping from addresses and interface hashes to their implementers.
     mapping(address => mapping(bytes32 => address)) internal interfaces;
@@ -95,8 +94,8 @@ contract ERC1820Registry {
         require(!isERC165Interface(_interfaceHash), "Must not be an ERC165 hash");
         if (_implementer != address(0) && _implementer != msg.sender) {
             require(
-                ERC1820ImplementerInterface(_implementer)
-                    .canImplementInterfaceForAddress(_interfaceHash, addr) == ERC1820_ACCEPT_MAGIC,
+                ERC1820ImplementerInterface(_implementer).canImplementInterfaceForAddress(_interfaceHash, addr)
+                    == ERC1820_ACCEPT_MAGIC,
                 "Does not implement the interface"
             );
         }
@@ -117,7 +116,7 @@ contract ERC1820Registry {
     /// @notice Get the manager of an address.
     /// @param _addr Address for which to return the manager.
     /// @return Address of the manager for a given address.
-    function getManager(address _addr) public view returns(address) {
+    function getManager(address _addr) public view returns (address) {
         // By default the manager of an address is the same address
         if (managers[_addr] == address(0)) {
             return _addr;
@@ -129,7 +128,7 @@ contract ERC1820Registry {
     /// @notice Compute the keccak256 hash of an interface given its name.
     /// @param _interfaceName Name of the interface.
     /// @return The keccak256 hash of an interface name.
-    function interfaceHash(string calldata _interfaceName) external pure returns(bytes32) {
+    function interfaceHash(string calldata _interfaceName) external pure returns (bytes32) {
         return keccak256(abi.encodePacked(_interfaceName));
     }
 
@@ -140,8 +139,8 @@ contract ERC1820Registry {
     /// @param _contract Address of the contract for which to update the cache.
     /// @param _interfaceId ERC165 interface for which to update the cache.
     function updateERC165Cache(address _contract, bytes4 _interfaceId) external {
-        interfaces[_contract][_interfaceId] = implementsERC165InterfaceNoCache(
-            _contract, _interfaceId) ? _contract : address(0);
+        interfaces[_contract][_interfaceId] =
+            implementsERC165InterfaceNoCache(_contract, _interfaceId) ? _contract : address(0);
         erc165Cached[_contract][_interfaceId] = true;
     }
 
@@ -193,25 +192,28 @@ contract ERC1820Registry {
 
     /// @dev Make a call on a contract without throwing if the function does not exist.
     function noThrowCall(address _contract, bytes4 _interfaceId)
-        internal view returns (uint256 success, uint256 result)
+        internal
+        view
+        returns (uint256 success, uint256 result)
     {
         bytes4 erc165ID = ERC165ID;
 
         assembly {
-            let x := mload(0x40)               // Find empty storage location using "free memory pointer"
-            mstore(x, erc165ID)                // Place signature at beginning of empty storage
+            let x := mload(0x40) // Find empty storage location using "free memory pointer"
+            mstore(x, erc165ID) // Place signature at beginning of empty storage
             mstore(add(x, 0x04), _interfaceId) // Place first argument directly next to signature
 
-            success := staticcall(
-                30000,                         // 30k gas
-                _contract,                     // To addr
-                x,                             // Inputs are stored at location x
-                0x24,                          // Inputs are 36 (4 + 32) bytes long
-                x,                             // Store output over input (saves space)
-                0x20                           // Outputs are 32 bytes long
-            )
+            success :=
+                staticcall(
+                    30000, // 30k gas
+                    _contract, // To addr
+                    x, // Inputs are stored at location x
+                    0x24, // Inputs are 36 (4 + 32) bytes long
+                    x, // Store output over input (saves space)
+                    0x20 // Outputs are 32 bytes long
+                )
 
-            result := mload(x)                 // Load the result
+            result := mload(x) // Load the result
         }
     }
 }

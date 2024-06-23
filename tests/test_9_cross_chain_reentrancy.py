@@ -1,6 +1,6 @@
 from wake.testing import *
-from pytypes.contracts.crosschainreentrancy.crossChainWarriors import CrossChainWarriors
-from pytypes.contracts.crosschainreentrancy.attacker import Attacker
+from pytypes.contracts.crosschainreentrancy.CrossChainWarriors import CrossChainWarriors
+from pytypes.contracts.crosschainreentrancy.Attacker import Attacker
 
 chain1 = Chain()
 chain2 = Chain()
