@@ -24,18 +24,6 @@ The `getCurrentPrice` function in `VulnVault` is exploited during the `withdraw`
 
 ### Prevention
 
-- **ReentrancyGuard**: Implement a reentrancy guard within the `getCurrentPrice` function to prevent reentrant calls.
-
-```solidity
-function getCurrentPrice() public view returns (uint256) {
-    if(_reentrancyGuardEntered()){
-        revert ReadonlyReentrancy();
-    }
-    if(totalTokens == 0 || totalStake == 0) return 10e18;
-    return totalTokens * 10e18 / totalStake;
-}
-```
-
 - **Checks-Effects-Interactions Pattern**: Ensure all state changes occur before any external calls.
 
 This pattern ensures the `getCurrentPrice` function returns a trusted value, even if recursively called.
@@ -50,4 +38,16 @@ function withdraw(uint256 burnAmount) public nonReentrant {
 }
 ```
 
+- **ReentrancyGuard**: Implement a reentrancy guard within the `getCurrentPrice` function to prevent reentrant calls.
 
+```solidity
+function getCurrentPrice() public view returns (uint256) {
+    if(_reentrancyGuardEntered()){
+        revert ReadonlyReentrancy();
+    }
+    if(totalTokens == 0 || totalStake == 0) return 10e18;
+    return totalTokens * 10e18 / totalStake;
+}
+```
+
+By adopting them, reentrancy attacks in ERC721 contracts can be prevented, ensuring the integrity of the minting process and adherence to supply limits.

@@ -29,7 +29,7 @@ The Masks contract checks the number of minting NFTs at the beginning of the fun
     - This allows minting 20 more NFTs since the check uses `N+1+20`, but it should check `N+20+20`.
     - Repeat similarly to mint more than 20 NFTs in one transaction, exceeding the contract's minting limit.
 
-### Mitigation
+### Prevention
 
 - **ReentrancyGuard**: Implement a ReentrancyGuard to prevent reentrant calls.
 - Use a single variable to track `totalSupply`.
@@ -38,4 +38,4 @@ The Masks contract checks the number of minting NFTs at the beginning of the fun
 
 - [The Dangers of Surprising Code](https://samczsun.com/the-dangers-of-surprising-code/)
 
-By adopting these mitigations, reentrancy attacks in ERC721 contracts can be prevented, ensuring the integrity of the minting process and adherence to supply limits.
+By adopting them, reentrancy attacks in ERC721 contracts can be prevented, ensuring the integrity of the minting process and adherence to supply limits.
